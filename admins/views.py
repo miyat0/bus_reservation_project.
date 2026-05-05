@@ -237,6 +237,3 @@ def delete_booking(request, booking_id):
         return redirect(referer)
     return render(request, 'admins/confirm_delete.html', {'object': booking, 'type': 'Booking'})
 
-def discount_offers(request):
-    if not request.user.is_staff: return HttpResponseForbidden()
-    return render(request, 'admins/placeholder.html', {'title': 'Discount Offers & Promotions'})

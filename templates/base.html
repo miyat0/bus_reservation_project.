@@ -344,7 +344,6 @@
                         <a href="{% url 'bus_list' %}" class="sidebar-link {% if 'bus' in request.resolver_match.url_name %}active{% endif %}"><i class="fas fa-bus-simple"></i> Services & Fleet</a>
                         <a href="{% url 'all_bookings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'all_bookings' %}active{% endif %}"><i class="fas fa-ticket-simple"></i> All Bookings</a>
                         <a href="{% url 'all_users' %}" class="sidebar-link {% if 'user' in request.resolver_match.url_name or 'staff' in request.resolver_match.url_name %}active{% endif %}"><i class="fas fa-users"></i> Users & Staff</a>
-                        <a href="{% url 'discount_offers' %}" class="sidebar-link {% if request.resolver_match.url_name == 'discount_offers' %}active{% endif %}"><i class="fas fa-tags"></i> Discount Offers</a>
                     {% elif user.is_staff %}
                         <div class="sidebar-section-title">Staff Operations</div>
                         <a href="{% url 'staff_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'staff_dashboard' %}active{% endif %}"><i class="fas fa-home"></i> Dashboard</a>

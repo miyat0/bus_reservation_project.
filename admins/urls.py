@@ -13,7 +13,6 @@ urlpatterns = [
     path('user/delete/<int:user_id>/', views.delete_user, name='delete_user'),
     path('manage-staff/', views.manage_staff, name='manage_staff'),
     path('add-staff/', views.add_staff, name='add_staff'),
-    path('discounts/', views.discount_offers, name='discount_offers'),
     path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('reports/', views.admin_reports, name='admin_reports'),
     path('settings/', views.admin_settings, name='admin_settings'),
