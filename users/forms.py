@@ -16,7 +16,7 @@ class SignUpForm(UserCreationForm):
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['seat_number']
+        fields = ['seat_number', 'number_of_seats']
 
 class ReviewForm(forms.ModelForm):
     class Meta:

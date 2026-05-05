@@ -23,6 +23,11 @@
                 <i class="fas fa-map-pin" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
                 <input type="text" name="destination" value="{{ request.GET.destination }}" placeholder="To City" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa;">
             </div>
+            
+            <div style="flex: 1; min-width: 200px; position: relative;">
+                <i class="fas fa-calendar-days" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
+                <input type="date" name="travel_date" value="{{ request.GET.travel_date }}" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa;">
+            </div>
 
             <div style="display: flex; gap: 12px; align-items: center;">
                 <button type="submit" class="btn btn-primary" style="height: 56px; border-radius: 20px; padding: 0 32px;">

@@ -42,11 +42,14 @@ def search_buses(request):
     buses = Bus.objects.all()
     source = request.GET.get('source')
     destination = request.GET.get('destination')
+    travel_date = request.GET.get('travel_date')
     
     if source:
         buses = buses.filter(source__icontains=source)
     if destination:
         buses = buses.filter(destination__icontains=destination)
+    if travel_date:
+        buses = buses.filter(departure_time__date=travel_date)
         
     return render(request, 'users/search_buses.html', {'buses': buses})
 
@@ -62,13 +65,17 @@ def book_bus(request, bus_id):
             
             if booking.seat_number <= 0:
                 form.add_error('seat_number', 'Seat number must be greater than 0.')
-            elif bus.available_seats <= 0:
-                form.add_error(None, 'No seats available on this bus.')
+            elif booking.number_of_seats <= 0:
+                form.add_error('number_of_seats', 'Number of seats must be at least 1.')
+            elif booking.number_of_seats > bus.available_seats:
+                form.add_error('number_of_seats', f'Only {bus.available_seats} seats available.')
+            elif Booking.objects.filter(bus=bus, seat_number=booking.seat_number, status='Confirmed').exists():
+                form.add_error('seat_number', f'Seat {booking.seat_number} is already booked.')
             else:
                 booking.save()
-                bus.available_seats -= 1
+                bus.available_seats -= booking.number_of_seats
                 bus.save()
-                messages.success(request, 'Booking successful!')
+                messages.success(request, f'Successfully booked {booking.number_of_seats} seat(s)!')
                 return redirect('user_dashboard')
     else:
         form = BookingForm()
