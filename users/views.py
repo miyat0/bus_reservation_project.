@@ -63,19 +63,34 @@ def book_bus(request, bus_id):
             booking.user = request.user
             booking.bus = bus
             
-            if booking.seat_number <= 0:
-                form.add_error('seat_number', 'Seat number must be greater than 0.')
-            elif booking.number_of_seats <= 0:
-                form.add_error('number_of_seats', 'Number of seats must be at least 1.')
+            # Handle multiple seat numbers from dynamic inputs
+            seat_list = request.POST.getlist('seat_number')
+            booking.seat_number = ", ".join(filter(None, seat_list))
+            
+            # Conflict Detection
+            requested_seats = [s.strip() for s in booking.seat_number.split(',') if s.strip()]
+            
+            # Get all already booked seats for this bus
+            existing_bookings = Booking.objects.filter(bus=bus, status='Confirmed')
+            all_booked_seats = []
+            for b in existing_bookings:
+                all_booked_seats.extend([s.strip() for s in b.seat_number.split(',')])
+            
+            conflicts = [s for s in requested_seats if s in all_booked_seats]
+            
+            if not requested_seats:
+                form.add_error('seat_number', 'Please provide at least one seat number.')
+            elif len(requested_seats) != booking.number_of_seats:
+                form.add_error('seat_number', f'You selected {booking.number_of_seats} seats but provided {len(requested_seats)} seat numbers.')
             elif booking.number_of_seats > bus.available_seats:
                 form.add_error('number_of_seats', f'Only {bus.available_seats} seats available.')
-            elif Booking.objects.filter(bus=bus, seat_number=booking.seat_number, status='Confirmed').exists():
-                form.add_error('seat_number', f'Seat {booking.seat_number} is already booked.')
+            elif conflicts:
+                form.add_error('seat_number', f"Seat(s) {', '.join(conflicts)} are already booked.")
             else:
                 booking.save()
                 bus.available_seats -= booking.number_of_seats
                 bus.save()
-                messages.success(request, f'Successfully booked {booking.number_of_seats} seat(s)!')
+                messages.success(request, f'Successfully booked seat(s): {booking.seat_number}!')
                 return redirect('user_dashboard')
     else:
         form = BookingForm()

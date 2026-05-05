@@ -12,7 +12,7 @@ class Booking(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bus = models.ForeignKey(Bus, on_delete=models.CASCADE)
-    seat_number = models.IntegerField()
+    seat_number = models.CharField(max_length=100)
     number_of_seats = models.IntegerField(default=1)
     booking_date = models.DateTimeField(auto_now_add=True)
     is_boarded = models.BooleanField(default=False)
