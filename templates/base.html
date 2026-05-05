@@ -269,6 +269,12 @@
         .toast-success { border-left-color: var(--success); }
         .toast-error { border-left-color: var(--danger); }
         .toast i { font-size: 1.1rem; }
+
+        /* Sidebar Collapsed State */
+        .app-container.collapsed .sidebar { transform: translateX(-100%); }
+        .app-container.collapsed .main-content { margin-left: 0; }
+
+        @media (max-width: 1024px) {
             .sidebar { transform: translateX(-100%); }
             .sidebar.open { transform: translateX(0); }
             .main-content { margin-left: 0; padding: 24px 20px; }
@@ -291,6 +297,7 @@
             background: #fff;
             height: 80px;
             display: flex;
+            flex-direction: row-reverse; /* Links Left, Logo Right */
             justify-content: space-between;
             align-items: center;
             padding: 0 8%;
@@ -378,7 +385,10 @@
 
                 <!-- Internal Portal Header -->
                 <header class="portal-header">
-                    <div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <button id="mainSidebarToggle" class="btn btn-outline" style="padding: 10px; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #fff;">
+                            <i class="fas fa-bars"></i>
+                        </button>
                         {% block header_extra %}{% endblock %}
                     </div>
                     <div class="profile-wrapper">
@@ -471,13 +481,27 @@
             });
         }
 
-        // Sidebar Toggle for Mobile
-        const sidebarToggle = document.getElementById('sidebarToggle');
+        // Sidebar Toggle Persistent Logic
+        const container = document.querySelector('.app-container');
+        const mainToggle = document.getElementById('mainSidebarToggle');
+        const mobileToggle = document.getElementById('sidebarToggle');
         const sidebar = document.getElementById('appSidebar');
-        if (sidebarToggle && sidebar) {
-            sidebarToggle.addEventListener('click', () => {
+
+        function toggleSidebar() {
+            if (window.innerWidth > 1024) {
+                container.classList.toggle('collapsed');
+                localStorage.setItem('sidebarCollapsed', container.classList.contains('collapsed'));
+            } else {
                 sidebar.classList.toggle('open');
-            });
+            }
+        }
+
+        if (mainToggle) mainToggle.addEventListener('click', toggleSidebar);
+        if (mobileToggle) mobileToggle.addEventListener('click', toggleSidebar);
+
+        // Restore sidebar state
+        if (window.innerWidth > 1024 && localStorage.getItem('sidebarCollapsed') === 'true') {
+            container.classList.add('collapsed');
         }
 
         // Toast System
