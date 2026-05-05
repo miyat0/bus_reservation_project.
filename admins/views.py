@@ -64,7 +64,11 @@ def home(request):
     destinations = Bus.objects.values_list('destination', flat=True).distinct()
     cities = sorted(list(set(list(sources) + list(destinations))))
     
-    return render(request, 'admins/home.html', {'cities': cities})
+    from datetime import date
+    return render(request, 'admins/home.html', {
+        'cities': cities,
+        'today_date': date.today().strftime('%Y-%m-%d')
+    })
 
 def bus_list(request):
     buses_list = Bus.objects.all().order_by('id')
