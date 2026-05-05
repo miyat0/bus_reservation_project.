@@ -39,6 +39,7 @@ def my_bookings(request):
     return render(request, 'users/my_bookings.html', {'bookings': bookings})
 
 def search_buses(request):
+    cities = ['Kochi', 'Trivandrum', 'Kozhikode', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Mysore', 'Mangalore', 'Hyderabad']
     buses = Bus.objects.all().order_by('departure_time')
     source = request.GET.get('source')
     destination = request.GET.get('destination')
@@ -57,7 +58,8 @@ def search_buses(request):
         
     return render(request, 'users/search_buses.html', {
         'buses': buses,
-        'current_time': timezone.now()
+        'current_time': timezone.now(),
+        'cities': cities
     })
 
 from django.utils import timezone

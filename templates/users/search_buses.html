@@ -12,7 +12,12 @@
         <form method="get" action="{% url 'search_buses' %}" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
             <div style="flex: 1; min-width: 200px; position: relative;">
                 <i class="fas fa-location-dot" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
-                <input type="text" name="source" value="{{ request.GET.source }}" placeholder="From City" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa;">
+                <select name="source" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; appearance: none; -webkit-appearance: none;">
+                    <option value="">From City</option>
+                    {% for city in cities %}
+                        <option value="{{ city }}" {% if request.GET.source == city %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
             </div>
             
             <div style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--primary-light); color: var(--primary);">
@@ -21,7 +26,12 @@
 
             <div style="flex: 1; min-width: 200px; position: relative;">
                 <i class="fas fa-map-pin" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
-                <input type="text" name="destination" value="{{ request.GET.destination }}" placeholder="To City" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa;">
+                <select name="destination" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; appearance: none; -webkit-appearance: none;">
+                    <option value="">To City</option>
+                    {% for city in cities %}
+                        <option value="{{ city }}" {% if request.GET.destination == city %}selected{% endif %}>{{ city }}</option>
+                    {% endfor %}
+                </select>
             </div>
             
             <div style="flex: 1; min-width: 200px; position: relative;">

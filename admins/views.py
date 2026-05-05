@@ -9,7 +9,24 @@ from staff.models import Staff
 from django import forms
 
 # Forms for Admin management
+CITY_CHOICES = [
+    ('', 'Select City'),
+    ('Kochi', 'Kochi'),
+    ('Trivandrum', 'Trivandrum'),
+    ('Kozhikode', 'Kozhikode'),
+    ('Chennai', 'Chennai'),
+    ('Coimbatore', 'Coimbatore'),
+    ('Madurai', 'Madurai'),
+    ('Bangalore', 'Bangalore'),
+    ('Mysore', 'Mysore'),
+    ('Mangalore', 'Mangalore'),
+    ('Hyderabad', 'Hyderabad'),
+]
+
 class BusForm(forms.ModelForm):
+    source = forms.ChoiceField(choices=CITY_CHOICES, widget=forms.Select(attrs={'class': 'input'}))
+    destination = forms.ChoiceField(choices=CITY_CHOICES, widget=forms.Select(attrs={'class': 'input'}))
+
     class Meta:
         model = Bus
         fields = '__all__'
