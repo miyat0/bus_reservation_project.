@@ -177,6 +177,54 @@
             font-weight: 800;
         }
 
+        /* Profile Dropdown */
+        .profile-wrapper { position: relative; }
+        .user-profile-badge { cursor: pointer; transition: 0.2s; }
+        .user-profile-badge:hover { border-color: var(--primary); }
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 220px;
+            background: #fff;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--line);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+            padding: 8px 0;
+        }
+        .profile-dropdown.show { display: flex; animation: slideDown 0.2s ease-out; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-item {
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: none;
+            background: none;
+            width: 100%;
+            cursor: pointer;
+            text-align: left;
+        }
+        .dropdown-item i { font-size: 1rem; width: 20px; text-align: center; color: var(--text-muted); }
+        .dropdown-item:hover { background: var(--bg); color: var(--primary); }
+        .dropdown-item:hover i { color: var(--primary); }
+        .dropdown-divider { height: 1px; background: var(--line); margin: 8px 0; }
+        .dropdown-item.logout-btn { color: var(--danger); }
+        .dropdown-item.logout-btn:hover { background: var(--primary-light); }
+        .dropdown-item.logout-btn i { color: var(--danger); }
+
         /* Empty & Loading States */
         .empty-state { text-align: center; padding: 60px 40px; color: var(--text-muted); }
         .empty-state i { font-size: 3rem; margin-bottom: 20px; color: var(--line); }
@@ -299,15 +347,42 @@
                     <div>
                         {% block header_extra %}{% endblock %}
                     </div>
-                    <div class="user-profile-badge">
-                        <div class="avatar-circle">
-                            {{ user.username|first|upper }}
+                    <div class="profile-wrapper">
+                        <div class="user-profile-badge" id="profileBadge">
+                            <div class="avatar-circle">
+                                {{ user.username|first|upper }}
+                            </div>
+                            <div style="display: flex; flex-direction: column; justify-content: center;">
+                                <span style="font-weight: 800; font-size: 0.9rem; line-height: 1;">{{ user.username }}</span>
+                                <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 2px;">
+                                    {% if user.is_superuser %}Administrator{% elif user.is_staff %}Staff Member{% else %}Traveler{% endif %}
+                                </span>
+                            </div>
+                            <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: var(--text-muted); margin-left: 8px;"></i>
                         </div>
-                        <div style="display: flex; flex-direction: column; justify-content: center;">
-                            <span style="font-weight: 800; font-size: 0.9rem; line-height: 1;">{{ user.username }}</span>
-                            <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 2px;">
-                                {% if user.is_superuser %}Administrator{% elif user.is_staff %}Staff Member{% else %}Traveler{% endif %}
-                            </span>
+                        
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <div style="padding: 16px 20px; border-bottom: 1px solid var(--line); background: var(--bg);">
+                                <div style="font-weight: 800; font-size: 0.9rem;">{{ user.username }}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ user.email }}</div>
+                            </div>
+                            
+                            {% if user.is_superuser %}
+                                <a href="{% url 'admin_profile' %}" class="dropdown-item"><i class="fas fa-user-circle"></i> My Account</a>
+                            {% elif user.is_staff %}
+                                <a href="{% url 'staff_profile' %}" class="dropdown-item"><i class="fas fa-user-circle"></i> My Profile</a>
+                            {% else %}
+                                <a href="{% url 'user_profile' %}" class="dropdown-item"><i class="fas fa-user-circle"></i> Account Settings</a>
+                            {% endif %}
+                            
+                            <div class="dropdown-divider"></div>
+                            
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </header>
@@ -355,6 +430,23 @@
     </div>
 
     <script>
+        // Profile Dropdown Toggle
+        const profileBadge = document.getElementById('profileBadge');
+        const profileDropdown = document.getElementById('profileDropdown');
+        
+        if (profileBadge && profileDropdown) {
+            profileBadge.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!profileDropdown.contains(e.target) && !profileBadge.contains(e.target)) {
+                    profileDropdown.classList.remove('show');
+                }
+            });
+        }
+
         // Sidebar Toggle for Mobile
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.getElementById('appSidebar');

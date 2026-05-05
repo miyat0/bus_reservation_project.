@@ -20,8 +20,13 @@ class StaffAssignmentForm(forms.ModelForm):
         fields = ['assigned_bus']
 
 def home(request):
-    if request.user.is_authenticated and request.user.is_staff:
-        return redirect('admin_dashboard')
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('admin_dashboard')
+        elif request.user.is_staff:
+            return redirect('staff_dashboard')
+        else:
+            return redirect('user_dashboard')
     return render(request, 'admins/home.html')
 
 def bus_list(request):
