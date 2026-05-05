@@ -296,7 +296,7 @@
         /* Global Nav (Public) */
         .global-nav {
             background: #fff;
-            height: 80px;
+            height: 72px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -305,8 +305,9 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            border-bottom: 1px solid var(--line);
         }
-        .logo { font-size: 1.6rem; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 12px; letter-spacing: -0.02em; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: -0.02em; flex-shrink: 0; }
         .logo-icon { 
             width: 38px; 
             height: 38px; 
@@ -369,10 +370,37 @@
             </aside>
         {% endif %}
 
+        {% if not user.is_authenticated or request.resolver_match.url_name == 'home' %}
+            <!-- Public Top Navigation (Always Full Width) -->
+            <nav class="global-nav">
+                <a href="{% url 'home' %}" class="logo">
+                    <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+                    <span>Quick<b>go</b></span>
+                </a>
+                <div class="nav-links">
+                    <a href="{% url 'home' %}" class="nav-link">Home</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'search_buses' %}" class="nav-link">Search</a>
+                        <a href="{% url 'my_bookings' %}" class="nav-link">My Bookings</a>
+                        {% if user.is_superuser %}
+                            <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
+                        {% elif user.is_staff %}
+                            <a href="{% url 'staff_dashboard' %}" class="nav-link">Dashboard</a>
+                        {% else %}
+                            <a href="{% url 'user_dashboard' %}" class="nav-link">Dashboard</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}" class="nav-link">Login</a>
+                        <a href="{% url 'signup' %}" class="btn btn-primary btn-sm" style="height: 40px; white-space: nowrap;">Sign up</a>
+                    {% endif %}
+                </div>
+            </nav>
+        {% endif %}
+
         <div class="{% if user.is_authenticated and request.resolver_match.url_name != 'home' %}main-content{% else %}full-width{% endif %}">
             
             {% if user.is_authenticated and request.resolver_match.url_name != 'home' %}
-                <!-- Mobile Header -->
+                <!-- Mobile Header (Only for Portals) -->
                 <div class="mobile-header">
                     <a href="{% url 'home' %}" class="logo">
                         <i class="fas fa-bolt"></i> Quickgo
@@ -429,31 +457,6 @@
                         </div>
                     </div>
                 </header>
-            {% elif request.resolver_match.url_name == 'home' or not user.is_authenticated %}
-                <!-- Public Top Navigation -->
-                <nav class="global-nav">
-                    <a href="{% url 'home' %}" class="logo">
-                        <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-                        <span>Quick<b>go</b></span>
-                    </a>
-                    <div class="nav-links">
-                        <a href="{% url 'home' %}" class="nav-link">Home</a>
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'search_buses' %}" class="nav-link">Search</a>
-                            <a href="{% url 'my_bookings' %}" class="nav-link">My Bookings</a>
-                            {% if user.is_superuser %}
-                                <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
-                            {% elif user.is_staff %}
-                                <a href="{% url 'staff_dashboard' %}" class="nav-link">Dashboard</a>
-                            {% else %}
-                                <a href="{% url 'user_dashboard' %}" class="nav-link">Dashboard</a>
-                            {% endif %}
-                        {% else %}
-                            <a href="{% url 'login' %}" class="nav-link">Login</a>
-                            <a href="{% url 'signup' %}" class="btn btn-primary">Sign up</a>
-                        {% endif %}
-                    </div>
-                </nav>
             {% endif %}
 
             <div id="toastContainer" class="toast-container"></div>
