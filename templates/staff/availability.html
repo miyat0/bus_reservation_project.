@@ -1,36 +1,46 @@
 {% extends 'base.html' %}
 
+{% block header_extra %}
+    <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Duty Management</div>
+    <h1 class="page-title" style="margin: 0;">Availability Status</h1>
+{% endblock %}
+
 {% block content %}
-<div class="page-header">
-    <h1 class="page-title">Manage Availability</h1>
-    <p class="muted-text">Toggle your duty status to inform dispatch of your availability.</p>
+<div class="card-header" style="margin-bottom: 32px;">
+    <p class="muted-text">Toggle your duty status to inform dispatch of your current operational capacity.</p>
 </div>
 
-<div class="glass-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
-    <div style="width: 100px; height: 100px; background: {% if staff.is_available %}#dcfce7{% else %}#fee2e2{% endif %}; color: {% if staff.is_available %}#10b981{% else %}#ef4444{% endif %}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin: 0 auto 32px;">
-        <i class="fas {% if staff.is_available %}fa-toggle-on{% else %}fa-toggle-off{% endif %}"></i>
+<div class="card" style="max-width: 600px; margin: 0 auto; padding: 64px; text-align: center;">
+    <div style="width: 120px; height: 120px; background: {% if staff.is_available %}#dcfce7{% else %}#fee2e2{% endif %}; color: {% if staff.is_available %}#10b981{% else %}#ef4444{% endif %}; border-radius: 40px; display: flex; align-items: center; justify-content: center; font-size: 4rem; margin: 0 auto 32px; transition: all 0.3s; transform: rotate(-5deg);">
+        <i class="fas {% if staff.is_available %}fa-user-check{% else %}fa-user-clock{% endif %}"></i>
     </div>
     
-    <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 12px;">
-        Currently: {% if staff.is_available %}Free / On Duty{% else %}Busy / Off Duty{% endif %}
+    <h2 style="font-size: 2.25rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.03em;">
+        {% if staff.is_available %}Ready for Duty{% else %}Currently Busy{% endif %}
     </h2>
-    <p style="color: var(--text-muted); font-weight: 600; margin-bottom: 40px;">
+    <p class="muted-text" style="margin-bottom: 48px; font-size: 1.1rem;">
         {% if staff.is_available %}
-            You are currently marked as available for new assignments and trips.
+            You are currently visible to dispatchers for new service assignments and trip rotations.
         {% else %}
-            You are currently marked as busy. Dispatch will not assign new routes to you.
+            You are currently marked as off-duty. Dispatch will not assign new routes until you toggle back.
         {% endif %}
     </p>
 
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="primary-button" style="width: 100%; padding: 18px; font-size: 1.1rem; background: {% if staff.is_available %}#0f172a{% else %}#10b981{% endif %};">
-            {% if staff.is_available %}Mark as Busy{% else %}Mark as Available{% endif %}
+        <button type="submit" class="btn {% if staff.is_available %}btn-outline{% else %}btn-primary{% endif %}" style="width: 100%; justify-content: center; height: 64px; font-size: 1.25rem;">
+            {% if staff.is_available %}
+                <i class="fas fa-power-off"></i> Go Off-Duty
+            {% else %}
+                <i class="fas fa-bolt"></i> Go On-Duty
+            {% endif %}
         </button>
     </form>
     
-    <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
-        <i class="fas fa-info-circle"></i> This status affects your visibility in the admin dispatch console.
+    <div style="margin-top: 32px; padding: 16px; background: var(--bg); border-radius: var(--radius-md); font-size: 0.9rem; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 12px; justify-content: center;">
+        <i class="fas fa-circle-info" style="color: var(--info);"></i>
+        <span>Updates are synced instantly with the Global Control Center.</span>
     </div>
 </div>
 {% endblock %}
+

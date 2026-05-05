@@ -1,50 +1,80 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="form-card">
-    <span class="eyebrow">New account</span>
-    <h1 class="section-title">Create User Login</h1>
-
-    <p class="muted-text">Create a username and password so you can sign in and make bookings.</p>
-
-    {% if form.non_field_errors %}
-        <div class="info-card" style="margin-bottom: 18px;">
-            {% for error in form.non_field_errors %}
-                <div>{{ error }}</div>
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    <form method="post">
-        {% csrf_token %}
-        <div>
-            <label for="{{ form.username.id_for_label }}">Username:</label>
-            {{ form.username }}
-            {% for error in form.username.errors %}
-                <div class="muted-text" style="color:#dc2626; margin-bottom: 12px;">{{ error }}</div>
-            {% endfor %}
+<div style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 200px); padding: 40px 20px;">
+    <div class="card" style="max-width: 520px; width: 100%; padding: 56px; border-radius: var(--radius-lg); box-shadow: 0 40px 80px rgba(0,0,0,0.08);">
+        
+        <div style="text-align: center; margin-bottom: 40px;">
+            <div style="width: 72px; height: 72px; background: var(--primary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);">
+                <i class="fas fa-user-plus" style="color: #fff; font-size: 1.8rem;"></i>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 8px; color: var(--text);">Join Quickgo</h1>
+            <p class="muted-text">Create your account to start booking trips and earning loyalty points on every journey.</p>
         </div>
 
-        <div>
-            <label for="{{ form.password1.id_for_label }}">Password:</label>
-            {{ form.password1 }}
-            {% for error in form.password1.errors %}
-                <div class="muted-text" style="color:#dc2626; margin-bottom: 12px;">{{ error }}</div>
-            {% endfor %}
-        </div>
+        {% if form.non_field_errors %}
+            <div style="background: #fee2e2; color: #991b1b; padding: 16px; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 700; margin-bottom: 32px; border: 1px solid rgba(239, 68, 68, 0.15);">
+                {% for error in form.non_field_errors %}
+                    <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                        <i class="fas fa-circle-exclamation"></i>
+                        <span>{{ error }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-        <div>
-            <label for="{{ form.password2.id_for_label }}">Password confirmation:</label>
-            {{ form.password2 }}
-            {% for error in form.password2.errors %}
-                <div class="muted-text" style="color:#dc2626; margin-bottom: 12px;">{{ error }}</div>
-            {% endfor %}
-        </div>
+        <form method="post" autocomplete="off" class="modern-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="label">Username</label>
+                <div style="position: relative;">
+                    <i class="fas fa-user" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="text" name="username" value="{{ form.username.value|default:'' }}" required placeholder="Pick a unique username" class="input" style="padding-left: 48px;">
+                </div>
+                {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
 
-        <div class="cta-row">
-            <button type="submit" class="primary-button" style="border:0;">Create account</button>
-            <a href="{% url 'login' %}" class="secondary-button">Back to login</a>
-        </div>
-    </form>
+            <div class="form-group">
+                <label class="label">Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-lock" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="password" name="password1" required placeholder="Create a strong password" class="input" style="padding-left: 48px;">
+                </div>
+                {% if form.password1.errors %}
+                    {% for error in form.password1.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="form-group" style="margin-bottom: 40px;">
+                <label class="label">Confirm Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-shield-check" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="password" name="password2" required placeholder="Repeat your password" class="input" style="padding-left: 48px;">
+                </div>
+                {% if form.password2.errors %}
+                    {% for error in form.password2.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; height: 56px; font-size: 1.1rem;">
+                Create Your Account
+            </button>
+            
+            <div style="text-align: center; margin-top: 32px; font-size: 0.95rem; font-weight: 600;">
+                <span style="color: var(--text-muted);">Already a member?</span>
+                <a href="{% url 'login' %}" style="color: var(--primary); margin-left: 6px; font-weight: 800; text-decoration: none;">Sign in here</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
+

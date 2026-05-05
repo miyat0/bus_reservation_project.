@@ -2,122 +2,259 @@
 
 {% block content %}
 <style>
-    .hero-container {
+    .hero-section {
         position: relative;
-        margin-bottom: 100px;
-    }
-    .hero-box {
-        background: linear-gradient(135deg, #ff4e50 0%, #f92c8b 100%);
-        border-radius: 40px;
-        padding: 100px 40px 160px;
-        color: #fff;
-        text-align: center;
+        padding: 80px 0 160px;
+        background: radial-gradient(circle at top right, #fff5f5 0%, transparent 40%),
+                    radial-gradient(circle at bottom left, #fff1f1 0%, transparent 40%);
+        border-radius: var(--radius-lg);
+        margin-bottom: 80px;
         overflow: hidden;
-        position: relative;
     }
-    .hero-box h1 { font-size: 3.5rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 16px; }
-    .hero-box p { font-size: 1.2rem; opacity: 0.9; font-weight: 500; }
+    
+    .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
 
-    .search-wrapper {
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: var(--primary-light);
+        color: var(--primary);
+        border-radius: 99px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 24px;
+    }
+
+    .hero-title {
+        font-size: 4.5rem;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -0.05em;
+        margin-bottom: 24px;
+        background: linear-gradient(135deg, var(--text) 0%, #475569 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-bottom: 48px;
+        line-height: 1.6;
+    }
+
+    .search-panel {
         position: absolute;
-        bottom: -50px;
+        bottom: -40px;
         left: 50%;
         transform: translateX(-50%);
-        width: 90%;
-        max-width: 1000px;
+        width: 100%;
+        max-width: 1100px;
         background: #fff;
-        border-radius: 24px;
-        padding: 10px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-        border: 1px solid #eee;
+        padding: 12px;
+        border-radius: 32px;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.12);
+        display: flex;
+        gap: 8px;
+        border: 1px solid var(--line);
         z-index: 10;
     }
-    .search-form { display: flex; align-items: center; width: 100%; }
-    .input-group {
+
+    .search-group {
         flex: 1;
-        padding: 15px 25px;
-        border-right: 1px solid #eee;
+        padding: 16px 24px;
+        border-radius: 24px;
+        transition: all 0.2s;
+        border: 1px solid transparent;
         display: flex;
         flex-direction: column;
+        gap: 4px;
     }
-    .input-group:last-of-type { border-right: none; }
-    .input-group label { font-size: 0.7rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; }
-    .input-group input { border: none; outline: none; font-size: 1rem; font-weight: 700; width: 100%; color: #1e293b; }
-    
-    .search-btn {
-        background: #ef4444;
-        color: #fff;
+
+    .search-group:hover {
+        background: var(--bg);
+        border-color: var(--line);
+    }
+
+    .search-group label {
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .search-group input {
         border: none;
-        padding: 20px 40px;
-        border-radius: 18px;
+        background: transparent;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text);
+        width: 100%;
+        outline: none;
+    }
+
+    .search-action {
+        padding: 0 40px;
+        background: var(--primary);
+        color: #fff;
+        border-radius: 24px;
         font-size: 1.1rem;
         font-weight: 800;
+        border: none;
         cursor: pointer;
-        transition: 0.3s;
-        margin-left: 10px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
-    .search-btn:hover { background: #dc2626; transform: scale(1.02); }
 
-    .feature-grid {
+    .search-action:hover {
+        background: var(--primary-dark);
+        transform: scale(1.02);
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+    }
+
+    .features-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
-        margin-top: 40px;
+        gap: 32px;
+        margin-top: 60px;
     }
-    .feature-card {
+
+    .feature-item {
         background: #fff;
-        border-radius: 24px;
-        padding: 40px;
-        text-align: left;
-        border: 1px solid #f1f5f9;
-        transition: 0.3s;
+        padding: 48px;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--line);
+        transition: all 0.3s;
     }
-    .feature-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-    .feature-card i { font-size: 2.5rem; color: #ef4444; margin-bottom: 24px; display: block; }
-    .feature-card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; }
-    .feature-card p { color: #64748b; font-size: 0.95rem; line-height: 1.6; }
+
+    .feature-item:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow);
+        border-color: var(--primary-light);
+    }
+
+    .feature-icon {
+        width: 64px;
+        height: 64px;
+        background: var(--bg);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: var(--primary);
+        margin-bottom: 24px;
+        transition: all 0.3s;
+    }
+
+    .feature-item:hover .feature-icon {
+        background: var(--primary);
+        color: #fff;
+        transform: rotate(-5deg);
+    }
+
+    .feature-item h3 {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+
+    .feature-item p {
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-weight: 500;
+    }
+
+    @media (max-width: 1024px) {
+        .hero-title { font-size: 3rem; }
+        .search-panel { flex-direction: column; bottom: -200px; padding: 24px; }
+        .hero-section { margin-bottom: 240px; }
+        .features-grid { grid-template-columns: 1fr; }
+    }
 </style>
 
-<div class="hero-container">
-    <div class="hero-box">
-        <h1>Your journey starts here.</h1>
-        <p>Premium bus travel with Quickgo. Fast, secure, and reliable.</p>
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-sparkles"></i>
+            Experience the future of travel
+        </div>
+        <h1 class="hero-title">Your Next Journey <br> Starts with Quickgo.</h1>
+        <p class="hero-subtitle">
+            Premium bus travel across 500+ cities. Experience comfort, <br> 
+            security, and reliability on every mile of your journey.
+        </p>
     </div>
 
-    <div class="search-wrapper">
-        <form action="{% url 'search_buses' %}" method="get" class="search-form">
-            <div class="input-group">
-                <label>From</label>
-                <input type="text" name="source" placeholder="Source City" required>
+    <div class="search-panel">
+        <form action="{% url 'search_buses' %}" method="get" style="display: contents;">
+            <div class="search-group">
+                <label>Leaving From</label>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-location-dot" style="color: var(--primary);"></i>
+                    <input type="text" name="source" placeholder="Source City" required>
+                </div>
             </div>
-            <div class="input-group">
-                <label>To</label>
-                <input type="text" name="destination" placeholder="Destination City" required>
+            <div style="width: 1px; background: var(--line); margin: 20px 0;"></div>
+            <div class="search-group">
+                <label>Going To</label>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-map-pin" style="color: var(--primary);"></i>
+                    <input type="text" name="destination" placeholder="Destination City" required>
+                </div>
             </div>
-            <div class="input-group" style="flex: 0.7;">
-                <label>Date</label>
-                <input type="date" name="date" value="2026-05-05">
+            <div style="width: 1px; background: var(--line); margin: 20px 0;"></div>
+            <div class="search-group" style="flex: 0.8;">
+                <label>Travel Date</label>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-calendar-days" style="color: var(--primary);"></i>
+                    <input type="date" name="date" value="2026-05-05">
+                </div>
             </div>
-            <button type="submit" class="search-btn">Search</button>
+            <button type="submit" class="search-action">
+                <span>Find Journeys</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </form>
     </div>
 </div>
 
-<div class="feature-grid">
-    <div class="feature-card">
-        <i class="fas fa-shield-alt"></i>
-        <h3>Secure Travel</h3>
-        <p>Verified operators and real-time tracking for every journey. Your safety is our priority.</p>
+<div class="features-grid">
+    <div class="feature-item">
+        <div class="feature-icon">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+        <h3>Safe & Secure</h3>
+        <p>Real-time fleet tracking, verified operators, and 24/7 emergency response protocols for your peace of mind.</p>
     </div>
-    <div class="feature-card">
-        <i class="fas fa-tag"></i>
-        <h3>Best Prices</h3>
-        <p>Unlock exclusive deals and rewards with our membership plan. Travel more for less.</p>
+    
+    <div class="feature-item">
+        <div class="feature-icon">
+            <i class="fas fa-bolt-lightning"></i>
+        </div>
+        <h3>Express Network</h3>
+        <p>Smart routing technology reduces travel time by up to 20% while maintaining the highest standards of safety.</p>
     </div>
-    <div class="feature-card">
-        <i class="fas fa-headset"></i>
-        <h3>24/7 Support</h3>
-        <p>Our dedicated support team is always here to help you. Assistance at every step.</p>
+    
+    <div class="feature-item">
+        <div class="feature-icon">
+            <i class="fas fa-gem"></i>
+        </div>
+        <h3>Elite Comfort</h3>
+        <p>Ergonomic seating, high-speed Wi-Fi, and climate control on every service. Premium travel as standard.</p>
     </div>
 </div>
 {% endblock %}

@@ -1,60 +1,103 @@
 {% extends 'base.html' %}
 
+{% block header_extra %}
+    <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Welcome back</div>
+    <h1 class="page-title" style="margin: 0;">Hi, {{ user.username }}</h1>
+{% endblock %}
+
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;">
-    <div>
-        <div style="font-size: 0.9rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Member Dashboard</div>
-        <h1 class="page-title">Hello, {{ user.username }}</h1>
-        <p class="muted-text">Manage your journeys and explore new destinations.</p>
-    </div>
-    <a href="{% url 'search_buses' %}" class="btn-primary" style="padding: 16px 32px;">Book New Trip</a>
+<div class="card-header" style="margin-bottom: 32px;">
+    <p class="muted-text">Track your upcoming journeys, earn rewards, and discover your next destination.</p>
+    <a href="{% url 'search_buses' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Book New Trip
+    </a>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 60px;">
-    <div class="card" style="border-bottom: 4px solid var(--primary);">
-        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Active Bookings</div>
-        <div style="font-size: 2.5rem; font-weight: 900; margin-top: 8px;">{{ active_bookings }}</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-bottom: 48px;">
+    <div class="card" style="padding: 32px; display: flex; align-items: center; gap: 24px;">
+        <div style="width: 64px; height: 64px; border-radius: 20px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.75rem;">
+            <i class="fas fa-ticket-simple"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Upcoming</div>
+            <div style="font-size: 2rem; font-weight: 900;">{{ active_bookings }}</div>
+        </div>
     </div>
-    <div class="card" style="border-bottom: 4px solid #3b82f6;">
-        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Trips</div>
-        <div style="font-size: 2.5rem; font-weight: 900; margin-top: 8px;">{{ total_bookings }}</div>
+    
+    <div class="card" style="padding: 32px; display: flex; align-items: center; gap: 24px;">
+        <div style="width: 64px; height: 64px; border-radius: 20px; background: #dbeafe; color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 1.75rem;">
+            <i class="fas fa-clock-rotate-left"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Trips</div>
+            <div style="font-size: 2rem; font-weight: 900;">{{ total_bookings }}</div>
+        </div>
     </div>
-    <div class="card" style="border-bottom: 4px solid #10b981;">
-        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Quickgo Points</div>
-        <div style="font-size: 2.5rem; font-weight: 900; margin-top: 8px;">1,250</div>
+    
+    <div class="card" style="padding: 32px; display: flex; align-items: center; gap: 24px; background: linear-gradient(135deg, #fff 0%, #f0fdf4 100%); border-color: #dcfce7;">
+        <div style="width: 64px; height: 64px; border-radius: 20px; background: #dcfce7; color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.75rem;">
+            <i class="fas fa-star"></i>
+        </div>
+        <div>
+            <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Quickgo Points</div>
+            <div style="font-size: 2rem; font-weight: 900; color: #166534;">1,250</div>
+        </div>
     </div>
 </div>
 
 <div class="card" style="padding: 0; overflow: hidden;">
-    <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
-        <h2 style="font-size: 1.25rem; font-weight: 800;">Recent Activity</h2>
-        <a href="{% url 'my_bookings' %}" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.9rem;">View All</a>
+    <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); background: #fafafa; display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem; margin: 0;">Recent Activity</h3>
+        <a href="{% url 'my_bookings' %}" style="font-size: 0.8rem; font-weight: 800; color: var(--primary); text-decoration: none;">View History <i class="fas fa-chevron-right" style="margin-left: 4px;"></i></a>
     </div>
-    <div style="padding: 0;">
-        <table style="width: 100%; border-collapse: collapse;">
+    
+    <div class="table-container" style="border: none; box-shadow: none; border-radius: 0;">
+        <table>
             <thead>
-                <tr style="text-align: left; background: #fcfcfc;">
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Service</th>
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Route</th>
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Date</th>
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Status</th>
+                <tr>
+                    <th>Service Detail</th>
+                    <th>Route Map</th>
+                    <th>Departure Date</th>
+                    <th>Booking Status</th>
                 </tr>
             </thead>
             <tbody>
                 {% for booking in recent_bookings %}
-                <tr style="border-top: 1px solid var(--line);">
-                    <td style="padding: 24px 32px; font-weight: 800;">{{ booking.bus.bus_name }}</td>
-                    <td style="padding: 24px 32px; font-weight: 600; color: var(--text-muted);">{{ booking.bus.source }} → {{ booking.bus.destination }}</td>
-                    <td style="padding: 24px 32px; font-weight: 600;">{{ booking.booking_date|date:"M d, Y" }}</td>
-                    <td style="padding: 24px 32px;">
-                        <span style="padding: 6px 16px; border-radius: 99px; font-size: 0.75rem; font-weight: 800; background: {% if booking.status == 'Confirmed' %}#dcfce7{% else %}#f1f5f9{% endif %}; color: {% if booking.status == 'Confirmed' %}#166534{% else %}#475569{% endif %};">
-                            {{ booking.status }}
-                        </span>
+                <tr>
+                    <td>
+                        <div style="font-weight: 800;">{{ booking.bus.bus_name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">#{{ booking.id|stringformat:"05d" }}</div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px; font-weight: 700;">
+                            <span>{{ booking.bus.source }}</span>
+                            <i class="fas fa-arrow-right" style="font-size: 0.7rem; color: var(--primary);"></i>
+                            <span>{{ booking.bus.destination }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600;">{{ booking.booking_date|date:"M d, Y" }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ booking.booking_date|date:"H:i" }}</div>
+                    </td>
+                    <td>
+                        {% if booking.status == 'Confirmed' %}
+                            <span class="badge badge-success">Confirmed</span>
+                        {% elif booking.status == 'Pending' %}
+                            <span class="badge badge-warning">Pending</span>
+                        {% else %}
+                            <span class="badge badge-info">{{ booking.status }}</span>
+                        {% endif %}
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4" style="padding: 60px; text-align: center; color: var(--text-muted);">No recent bookings found.</td>
+                    <td colspan="4">
+                        <div class="empty-state">
+                            <i class="fas fa-ticket"></i>
+                            <p>You haven't made any bookings yet.</p>
+                            <a href="{% url 'search_buses' %}" class="btn btn-outline btn-sm" style="margin-top: 16px;">Start Exploring</a>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

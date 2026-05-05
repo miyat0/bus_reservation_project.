@@ -1,55 +1,115 @@
 {% extends 'base.html' %}
 
+{% block header_extra %}
+    <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Fleet Management</div>
+    <h1 class="page-title" style="margin: 0;">Operational Services</h1>
+{% endblock %}
+
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;">
-    <div>
-        <div style="font-size: 0.9rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Fleet Management</div>
-        <h1 class="page-title">Operational Services</h1>
-        <p class="muted-text">Manage your bus routes, schedules, and active services.</p>
-    </div>
-    <a href="{% url 'add_bus' %}" class="btn-primary" style="padding: 16px 32px;">Add New Service</a>
+<div class="card-header" style="margin-bottom: 32px;">
+    <p class="muted-text">Manage your bus routes, schedules, and active services across the network.</p>
+    <a href="{% url 'add_bus' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add New Service
+    </a>
 </div>
 
 <div class="card" style="padding: 0; overflow: hidden;">
     <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); background: #fafafa;">
-        <form method="get" style="display: flex; gap: 16px; align-items: center;">
-            <input type="text" name="source" placeholder="Source" style="padding: 12px 20px; border-radius: 12px; border: 1px solid var(--line); flex: 1; font-weight: 700;">
-            <input type="text" name="destination" placeholder="Destination" style="padding: 12px 20px; border-radius: 12px; border: 1px solid var(--line); flex: 1; font-weight: 700;">
-            <button type="submit" class="btn-primary">Filter Fleet</button>
+        <form method="get" style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <div style="flex: 2; min-width: 200px;">
+                <input type="text" name="source" value="{{ request.GET.source }}" placeholder="Filter by Source..." class="input">
+            </div>
+            <div style="flex: 2; min-width: 200px;">
+                <input type="text" name="destination" value="{{ request.GET.destination }}" placeholder="Filter by Destination..." class="input">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-filter"></i> Apply Filters
+            </button>
+            <a href="{% url 'bus_list' %}" class="btn btn-secondary">Clear</a>
         </form>
     </div>
-    <div style="padding: 0;">
-        <table style="width: 100%; border-collapse: collapse;">
+
+    <div class="table-container" style="border: none; box-shadow: none; border-radius: 0;">
+        <table id="busTable">
             <thead>
-                <tr style="text-align: left; background: #fcfcfc;">
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Service Name</th>
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Route</th>
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Capacity</th>
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Price</th>
-                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Actions</th>
+                <tr>
+                    <th style="cursor: pointer;" onclick="sortTable('busTable', 0)">Service Name <i class="fas fa-sort"></i></th>
+                    <th style="cursor: pointer;" onclick="sortTable('busTable', 1)">Route <i class="fas fa-sort"></i></th>
+                    <th style="cursor: pointer;" onclick="sortTable('busTable', 2)">Capacity <i class="fas fa-sort"></i></th>
+                    <th style="cursor: pointer;" onclick="sortTable('busTable', 3)">Price <i class="fas fa-sort"></i></th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for bus in buses %}
-                <tr style="border-top: 1px solid var(--line);">
-                    <td style="padding: 24px 32px; font-weight: 800;">{{ bus.bus_name }}</td>
-                    <td style="padding: 24px 32px; font-weight: 700; color: var(--text-muted);">{{ bus.source }} → {{ bus.destination }}</td>
-                    <td style="padding: 24px 32px; font-weight: 700;">{{ bus.total_seats }} Seats</td>
-                    <td style="padding: 24px 32px; font-weight: 900; color: #10b981;">${{ bus.price }}</td>
-                    <td style="padding: 24px 32px;">
-                        <div style="display: flex; gap: 12px;">
-                            <a href="{% url 'edit_bus' bus.id %}" style="color: var(--primary); text-decoration: none; font-weight: 700;">Edit</a>
-                            <a href="{% url 'delete_bus' bus.id %}" style="color: #ef4444; text-decoration: none; font-weight: 700;">Delete</a>
+                <tr>
+                    <td>
+                        <div style="font-weight: 800; color: var(--text);">{{ bus.bus_name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">ID: #{{ bus.id|stringformat:"04d" }}</div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px; font-weight: 700;">
+                            <span>{{ bus.source }}</span>
+                            <i class="fas fa-arrow-right" style="font-size: 0.8rem; color: var(--primary);"></i>
+                            <span>{{ bus.destination }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-info">{{ bus.total_seats }} Seats Total</span>
+                    </td>
+                    <td>
+                        <div style="font-weight: 900; color: var(--success); font-size: 1.1rem;">${{ bus.price }}</div>
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <a href="{% url 'edit_bus' bus.id %}" class="btn btn-outline btn-sm" title="Edit Service">
+                                <i class="fas fa-pen-to-square"></i>
+                            </a>
+                            <form action="{% url 'delete_bus' bus.id %}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to remove this service?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fee2e2;" title="Delete Service">
+                                    <i class="fas fa-trash-can"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" style="padding: 60px; text-align: center; color: var(--text-muted);">No services found.</td>
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <i class="fas fa-bus-simple"></i>
+                            <h3>No Services Found</h3>
+                            <p>Try adjusting your filters or add a new service to the fleet.</p>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+
+{% if buses.has_other_pages %}
+<div class="pagination">
+    {% if buses.has_previous %}
+        <a href="?page=1{% if request.GET.source %}&source={{ request.GET.source }}{% endif %}{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}" class="page-link">&laquo; First</a>
+        <a href="?page={{ buses.previous_page_number }}{% if request.GET.source %}&source={{ request.GET.source }}{% endif %}{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}" class="page-link">Prev</a>
+    {% endif %}
+
+    {% for num in buses.paginator.page_range %}
+        {% if buses.number == num %}
+            <span class="page-link active">{{ num }}</span>
+        {% elif num > buses.number|add:'-3' and num < buses.number|add:'3' %}
+            <a href="?page={{ num }}{% if request.GET.source %}&source={{ request.GET.source }}{% endif %}{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}" class="page-link">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if buses.has_next %}
+        <a href="?page={{ buses.next_page_number }}{% if request.GET.source %}&source={{ request.GET.source }}{% endif %}{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}" class="page-link">Next</a>
+        <a href="?page={{ buses.paginator.num_pages }}{% if request.GET.source %}&source={{ request.GET.source }}{% endif %}{% if request.GET.destination %}&destination={{ request.GET.destination }}{% endif %}" class="page-link">Last &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
 {% endblock %}
+

@@ -1,75 +1,104 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<section style="max-width: 800px; margin: 0 auto;">
-    <div class="page-header">
-        <h1 class="section-title">{{ title }}</h1>
-        <p class="muted-text">Update bus details and schedule.</p>
-    </div>
+{% block header_extra %}
+    <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Service Configuration</div>
+    <h1 class="page-title" style="margin: 0;">{{ title }}</h1>
+{% endblock %}
 
-    <div class="glass-panel" style="padding: 40px;">
+{% block content %}
+<section style="max-width: 900px; margin: 0 auto;">
+    <div class="card" style="padding: 48px;">
+        <div style="margin-bottom: 32px; border-bottom: 1px solid var(--line); padding-bottom: 24px;">
+            <h2 style="font-size: 1.25rem; margin-bottom: 8px;">Service Details</h2>
+            <p class="muted-text">Provide the operational details for this bus service route.</p>
+        </div>
+
         {% if form.errors %}
-            <div style="background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 16px; border-radius: 12px; margin-bottom: 24px;">
-                <div style="font-weight: 800; margin-bottom: 4px;">Please correct the following errors:</div>
-                <ul style="padding-left: 20px; font-weight: 600; font-size: 0.9rem;">
-                    {% for field, errors in form.errors.items %}
-                        <li>{{ field|title }}: {{ errors|striptags }}</li>
-                    {% endfor %}
-                </ul>
+            <div style="background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 20px; border-radius: var(--radius-md); margin-bottom: 32px; display: flex; gap: 16px; align-items: flex-start;">
+                <i class="fas fa-circle-exclamation" style="margin-top: 4px;"></i>
+                <div>
+                    <div style="font-weight: 800; margin-bottom: 4px;">Form Submission Failed</div>
+                    <ul style="padding-left: 20px; font-weight: 600; font-size: 0.9rem;">
+                        {% for field, errors in form.errors.items %}
+                            <li>{{ field|title }}: {{ errors|striptags }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         {% endif %}
 
-        <form method="post" autocomplete="off">
+        <form method="post" autocomplete="off" class="modern-form">
             {% csrf_token %}
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-                <div style="grid-column: span 2;">
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Service Name</label>
-                    {{ form.bus_name }}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                <div style="grid-column: span 2;" class="form-group">
+                    <label class="label">Service / Bus Name</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-bus" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        <input type="text" name="bus_name" value="{{ form.bus_name.value|default:'' }}" class="input" style="padding-left: 44px;" required placeholder="e.g. Express Star 101">
+                    </div>
                 </div>
-                <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Origin City</label>
-                    {{ form.source }}
+                
+                <div class="form-group">
+                    <label class="label">Origin City</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-location-dot" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        <input type="text" name="source" value="{{ form.source.value|default:'' }}" class="input" style="padding-left: 44px;" required placeholder="Starting point">
+                    </div>
                 </div>
-                <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Destination City</label>
-                    {{ form.destination }}
+                
+                <div class="form-group">
+                    <label class="label">Destination City</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-map-pin" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        <input type="text" name="destination" value="{{ form.destination.value|default:'' }}" class="input" style="padding-left: 44px;" required placeholder="Final stop">
+                    </div>
                 </div>
-                <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Total Capacity</label>
-                    {{ form.total_seats }}
+
+                <div class="form-group">
+                    <label class="label">Total Capacity</label>
+                    <input type="number" name="total_seats" value="{{ form.total_seats.value|default:'' }}" class="input" required min="1">
                 </div>
-                <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Initial Availability</label>
-                    {{ form.available_seats }}
+
+                <div class="form-group">
+                    <label class="label">Available Seats</label>
+                    <input type="number" name="available_seats" value="{{ form.available_seats.value|default:'' }}" class="input" required min="0">
                 </div>
-                <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Service Price ($)</label>
-                    {{ form.price }}
+
+                <div class="form-group">
+                    <label class="label">Service Price ($)</label>
+                    <div style="position: relative;">
+                        <i class="fas fa-dollar-sign" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        <input type="number" name="price" value="{{ form.price.value|default:'' }}" class="input" style="padding-left: 44px;" required step="0.01">
+                    </div>
                 </div>
-                <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Departure Schedule</label>
-                    {{ form.departure_time }}
+
+                <div class="form-group">
+                    <label class="label">Departure Schedule</label>
+                    <input type="datetime-local" name="departure_time" value="{{ form.departure_time.value|date:'Y-m-d\TH:i' }}" class="input" required>
                 </div>
-                <div style="grid-column: span 2; margin-top: 32px; display: flex; flex-direction: column; gap: 12px;">
-                    <button type="submit" class="primary-button" style="width: 100%; padding: 18px; font-size: 1.1rem;">Confirm Service Details</button>
-                    <a href="{% url 'bus_list' %}" class="secondary-button" style="width: 100%; display: block; text-align: center; text-decoration: none; padding: 14px;">Back to List</a>
+
+                <div style="grid-column: span 2; margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 16px;">
+                        <i class="fas fa-save"></i> Save Service
+                    </button>
+                    <a href="{% url 'bus_list' %}" class="btn btn-outline" style="justify-content: center; padding: 16px;">
+                        Cancel
+                    </a>
                 </div>
             </div>
         </form>
         
         {% if form.instance.pk %}
-            <div style="margin-top: 12px;">
-                <form method="post" action="{% url 'delete_bus' form.instance.id %}" onsubmit="return confirm('Archive this service?');">
+            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line);">
+                <form method="post" action="{% url 'delete_bus' form.instance.id %}" onsubmit="return confirm('Permanently archive this service? This cannot be undone.');">
                     {% csrf_token %}
-                    <button type="submit" class="secondary-button" style="width: 100%; color: #ef4444; border-color: #fca5a5; padding: 14px;">Delete Service</button>
+                    <button type="submit" class="btn btn-outline" style="width: 100%; color: var(--danger); border-color: #fee2e2; justify-content: center;">
+                        <i class="fas fa-trash-can"></i> Archive This Service
+                    </button>
                 </form>
             </div>
         {% endif %}
     </div>
 </section>
-
-<style>
-    input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; }
-    ul.errorlist { color: #dc2626; list-style: none; padding: 0; margin-bottom: 10px; font-size: 0.9rem; }
-</style>
 {% endblock %}
+

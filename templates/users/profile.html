@@ -1,81 +1,166 @@
 {% extends 'base.html' %}
 
+{% block header_extra %}
+    <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Traveler Account</div>
+    <h1 class="page-title" style="margin: 0;">Personal Profile</h1>
+{% endblock %}
+
 {% block content %}
-<div class="page-header">
-    <h1 class="page-title">Personal Profile</h1>
-    <p class="muted-text">Manage your account and view your travel history.</p>
+<div class="card-header" style="margin-bottom: 32px;">
+    <p class="muted-text">Manage your personal information, security settings, and track your travel history.</p>
 </div>
 
-<div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 40px;">
+<div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 40px; align-items: start;">
     <!-- Profile Sidebar -->
-    <div style="display: flex; flex-direction: column; gap: 24px;">
-        <div class="glass-card" style="text-align: center;">
-            <div style="width: 100px; height: 100px; background: var(--primary-soft); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px;">
-                <i class="fas fa-user"></i>
+    <div style="display: flex; flex-direction: column; gap: 32px;">
+        <div class="card" style="text-align: center; padding: 48px 32px;">
+            <div class="avatar-circle" style="width: 120px; height: 120px; font-size: 3rem; margin: 0 auto 24px; background: linear-gradient(135deg, var(--primary), #fca5a5);">
+                {{ user.username|first|upper }}
             </div>
-            <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">{{ user.username }}</h2>
-            <p style="color: var(--text-muted); font-weight: 700; font-size: 0.9rem; margin-bottom: 24px;">Traveler Member</p>
-            <div style="height: 1px; background: var(--line); margin-bottom: 24px;"></div>
-            <div style="text-align: left; display: flex; flex-direction: column; gap: 16px;">
-                <div>
-                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Joined</div>
-                    <div style="font-weight: 700;">{{ user.date_joined|date:"F Y" }}</div>
+            <h2 style="font-size: 1.75rem; font-weight: 900; margin-bottom: 4px; color: var(--text); letter-spacing: -0.02em;">{{ user.username }}</h2>
+            <div style="margin-bottom: 32px;">
+                {% if user.is_staff %}
+                    <span class="badge badge-info">Operations Staff</span>
+                {% else %}
+                    <span class="badge badge-success">Verified Traveler</span>
+                {% endif %}
+            </div>
+            
+            <div style="height: 1px; background: var(--line); margin-bottom: 32px;"></div>
+            
+            <div style="text-align: left; display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Member Since</div>
+                        <div style="font-weight: 800; color: var(--text);">{{ user.date_joined|date:"F Y" }}</div>
+                    </div>
                 </div>
-                <div>
-                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Trips Taken</div>
-                    <div style="font-weight: 700;">{{ bookings.count }} Journeys</div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Total Journeys</div>
+                        <div style="font-weight: 800; color: var(--text);">{{ bookings.count }} Trips</div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div class="glass-card" style="background: var(--sidebar-bg); color: #fff; border: none;">
-            <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 12px;">Security</h3>
-            <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 20px;">Keep your account secure by updating your password regularly.</p>
-            <a href="{% url 'change_password' %}" class="primary-button" style="display: block; text-align: center; font-size: 0.9rem;">Change Password</a>
+        <div class="card" style="background: var(--text); color: #fff; border: none; padding: 40px; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -20px; right: -20px; font-size: 8rem; color: rgba(255,255,255,0.05); transform: rotate(15deg);">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <div style="position: relative; z-index: 2;">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <i class="fas fa-key" style="color: var(--primary); font-size: 1.2rem;"></i>
+                    <h3 style="font-size: 1.15rem; color: #fff; margin: 0;">Security Hub</h3>
+                </div>
+                <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 24px; line-height: 1.6;">Your security is our top priority. Update your credentials to keep your profile protected.</p>
+                <a href="{% url 'change_password' %}" class="btn btn-primary" style="width: 100%; justify-content: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+                    Change Password
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Main Content -->
     <div style="display: flex; flex-direction: column; gap: 40px;">
-        <div class="glass-card">
-            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 32px;">Account Information</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
-                <div>
-                    <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Email Address</div>
-                    <div style="font-weight: 700; font-size: 1.1rem;">{{ user.email|default:"Not verified" }}</div>
+        <div class="card" style="padding: 48px;">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 40px;">
+                <div style="width: 48px; height: 48px; border-radius: 14px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                    <i class="fas fa-id-card"></i>
                 </div>
-                <div>
-                    <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Contact Phone</div>
-                    <div style="font-weight: 700; font-size: 1.1rem;">Not provided</div>
+                <h3 style="font-size: 1.5rem; font-weight: 900; margin: 0; letter-spacing: -0.03em;">Account Credentials</h3>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px;">
+                <div class="form-group">
+                    <label class="label">Legal Full Name</label>
+                    <div style="font-weight: 800; font-size: 1.25rem; color: var(--text);">{{ user.get_full_name|default:user.username }}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Display identity on tickets</div>
+                </div>
+                <div class="form-group">
+                    <label class="label">Primary Email Address</label>
+                    <div style="font-weight: 800; font-size: 1.25rem; color: var(--text);">{{ user.email|default:"Not verified" }}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">For booking confirmations</div>
+                </div>
+                <div class="form-group">
+                    <label class="label">System Identity</label>
+                    <div style="font-weight: 800; font-size: 1.25rem; color: var(--text);">@{{ user.username }}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Internal unique identifier</div>
+                </div>
+                <div class="form-group">
+                    <label class="label">Account Status</label>
+                    <div>
+                        {% if user.is_active %}
+                            <div style="display: flex; align-items: center; gap: 8px; color: #166534; font-weight: 800;">
+                                <span style="width: 8px; height: 8px; background: #166534; border-radius: 50%;"></span>
+                                Fully Operational
+                            </div>
+                        {% else %}
+                            <span class="badge badge-danger">Deactivated</span>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="glass-card" style="padding: 0; overflow: hidden;">
-            <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); background: #f8fafc;">
-                <h3 style="font-size: 1.1rem; font-weight: 800;">Recent Travel Log</h3>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); background: #fafafa; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0;">Travel Activity Log</h3>
+                <a href="{% url 'my_bookings' %}" class="btn btn-outline btn-sm">
+                    View History Log <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
+                </a>
             </div>
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse;">
+            
+            <div class="table-container" style="border: none; box-shadow: none; border-radius: 0;">
+                <table>
                     <thead>
-                        <tr style="background: #f8fafc; text-align: left;">
-                            <th style="padding: 16px 32px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Route</th>
-                            <th style="padding: 16px 32px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Date</th>
-                            <th style="padding: 16px 32px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Status</th>
+                        <tr>
+                            <th>Service Route</th>
+                            <th>Departure</th>
+                            <th>Payment Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for b in bookings|slice:":5" %}
-                        <tr style="border-bottom: 1px solid var(--line);">
-                            <td style="padding: 16px 32px; font-weight: 700;">{{ b.bus.source }} → {{ b.bus.destination }}</td>
-                            <td style="padding: 16px 32px; font-weight: 600; color: var(--text-muted);">{{ b.booking_date|date:"M d, Y" }}</td>
-                            <td style="padding: 16px 32px;">
-                                <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ b.status }}</span>
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 16px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                        <i class="fas fa-bus-simple"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 800; color: var(--text);">{{ b.bus.source }} &rarr; {{ b.bus.destination }}</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ b.bus.bus_name }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="font-weight: 700; color: var(--text);">{{ b.booking_date|date:"M d, Y" }}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ b.booking_date|date:"H:i A" }}</div>
+                            </td>
+                            <td>
+                                {% if b.is_paid %}
+                                    <span class="badge badge-success">Paid & Confirmed</span>
+                                {% else %}
+                                    <span class="badge badge-warning">Awaiting Payment</span>
+                                {% endif %}
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="3" style="padding: 32px; text-align: center; color: var(--text-muted); font-weight: 600;">No trips recorded yet.</td>
+                            <td colspan="3">
+                                <div class="empty-state" style="padding: 60px 0;">
+                                    <i class="fas fa-map-location-dot" style="font-size: 2.5rem; color: var(--line); margin-bottom: 16px;"></i>
+                                    <p style="font-weight: 600;">Your travel log is empty. Ready for an adventure?</p>
+                                    <a href="{% url 'search_buses' %}" class="btn btn-primary btn-sm" style="margin-top: 20px;">Book Your First Trip</a>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -85,3 +170,4 @@
     </div>
 </div>
 {% endblock %}
+

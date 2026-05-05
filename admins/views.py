@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
+from django.core.paginator import Paginator
 from .models import Bus
 from users.models import Booking
 from staff.models import Staff
@@ -24,13 +25,17 @@ def home(request):
     return render(request, 'admins/home.html')
 
 def bus_list(request):
-    buses = Bus.objects.all()
+    buses_list = Bus.objects.all().order_by('id')
     source = request.GET.get('source')
     destination = request.GET.get('destination')
     if source:
-        buses = buses.filter(source__icontains=source)
+        buses_list = buses_list.filter(source__icontains=source)
     if destination:
-        buses = buses.filter(destination__icontains=destination)
+        buses_list = buses_list.filter(destination__icontains=destination)
+    
+    paginator = Paginator(buses_list, 10)
+    page_number = request.GET.get('page')
+    buses = paginator.get_page(page_number)
     return render(request, 'admins/bus_list.html', {'buses': buses})
 
 def add_bus(request):
@@ -70,12 +75,21 @@ def delete_bus(request, bus_id):
 
 def all_bookings(request):
     if not request.user.is_staff: return HttpResponseForbidden()
-    bookings = Booking.objects.all().order_by('-booking_date')
+    bookings_list = Booking.objects.all().order_by('-booking_date')
+    
+    paginator = Paginator(bookings_list, 10)
+    page_number = request.GET.get('page')
+    bookings = paginator.get_page(page_number)
     return render(request, 'admins/all_bookings.html', {'bookings': bookings})
 
 def all_users(request):
     if not request.user.is_staff: return HttpResponseForbidden()
-    users = User.objects.all().order_by('-date_joined')
+    users_list = User.objects.all().order_by('-date_joined')
+    
+    paginator = Paginator(users_list, 10)
+    page_number = request.GET.get('page')
+    users = paginator.get_page(page_number)
+    
     staff_members = Staff.objects.all()
     buses = Bus.objects.all()
     return render(request, 'admins/all_users.html', {'users': users, 'staff_members': staff_members, 'buses': buses})

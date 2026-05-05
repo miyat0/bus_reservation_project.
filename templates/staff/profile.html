@@ -1,59 +1,96 @@
 {% extends 'base.html' %}
 
+{% block header_extra %}
+    <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Operational Staff</div>
+    <h1 class="page-title" style="margin: 0;">Staff Credentials</h1>
+{% endblock %}
+
 {% block content %}
-<div class="page-header">
-    <h1 class="page-title">Staff Profile</h1>
-    <p class="muted-text">Manage your operational identity and credentials.</p>
+<div class="card-header" style="margin-bottom: 32px;">
+    <p class="muted-text">Manage your operational identity, assigned duties, and security credentials.</p>
 </div>
 
-<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 40px;">
+<div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 40px; align-items: start;">
     <!-- Profile Card -->
-    <div class="glass-card" style="text-align: center;">
-        <div style="width: 120px; height: 120px; background: var(--primary-soft); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin: 0 auto 24px;">
-            <i class="fas fa-id-card-clip"></i>
-        </div>
-        <h2 style="font-size: 1.5rem; font-weight: 800;">{{ user.username }}</h2>
-        <p style="color: var(--text-muted); font-weight: 600; margin-bottom: 24px;">Operational Staff</p>
-        
-        <div style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
-            <div style="padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid var(--line);">
-                <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Duty Status</div>
-                <div style="font-weight: 700; color: {% if staff.is_available %}#10b981{% else %}#ef4444{% endif %};">
-                    {% if staff.is_available %}Active & Available{% else %}Busy / Off-duty{% endif %}
-                </div>
+    <div style="display: flex; flex-direction: column; gap: 32px;">
+        <div class="card" style="text-align: center; padding: 48px 32px;">
+            <div style="width: 120px; height: 120px; background: var(--bg); color: var(--primary); border-radius: 40px; display: flex; align-items: center; justify-content: center; font-size: 4rem; margin: 0 auto 32px; box-shadow: var(--shadow-sm); transform: rotate(-5deg);">
+                <i class="fas fa-id-card-clip"></i>
             </div>
+            <h2 style="font-size: 1.75rem; font-weight: 900; margin-bottom: 4px; letter-spacing: -0.02em;">{{ user.username }}</h2>
+            <div style="margin-bottom: 32px;">
+                <span class="badge badge-info">Operational Staff</span>
+            </div>
+            
+            <div style="padding: 24px; background: var(--bg); border-radius: var(--radius-md); border: 1px solid var(--line); text-align: left;">
+                <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Active Duty Status</div>
+                {% if staff.is_available %}
+                    <div style="display: flex; align-items: center; gap: 10px; color: #166534; font-weight: 800;">
+                        <span style="width: 10px; height: 10px; background: #166534; border-radius: 50%;"></span>
+                        Ready & Available
+                    </div>
+                {% else %}
+                    <div style="display: flex; align-items: center; gap: 10px; color: var(--danger); font-weight: 800;">
+                        <span style="width: 10px; height: 10px; background: var(--danger); border-radius: 50%;"></span>
+                        On Duty / Busy
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card" style="background: var(--text); color: #fff; border: none; padding: 40px;">
+            <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 16px;">Security Settings</h3>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 24px; line-height: 1.6;">Update your access credentials periodically to ensure system integrity.</p>
+            <a href="{% url 'change_password' %}" class="btn btn-primary" style="width: 100%; justify-content: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                Update Password
+            </a>
         </div>
     </div>
 
     <!-- Details Card -->
-    <div class="glass-card">
-        <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 32px;">Account Details</h3>
+    <div class="card" style="padding: 48px;">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 40px;">
+            <div style="width: 48px; height: 48px; border-radius: 14px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-clipboard-user"></i>
+            </div>
+            <h3 style="font-size: 1.5rem; font-weight: 900; margin: 0; letter-spacing: -0.03em;">Staff Information</h3>
+        </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px;">
             <div>
-                <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Full Name</div>
-                <div style="font-weight: 700;">{{ user.get_full_name|default:user.username }}</div>
+                <label class="label">Full Legal Name</label>
+                <div style="font-weight: 800; font-size: 1.25rem;">{{ user.get_full_name|default:user.username }}</div>
             </div>
             <div>
-                <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Email Address</div>
-                <div style="font-weight: 700;">{{ user.email|default:"Not provided" }}</div>
+                <label class="label">Operational Email</label>
+                <div style="font-weight: 800; font-size: 1.25rem;">{{ user.email|default:"Not provided" }}</div>
             </div>
             <div>
-                <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Assigned Vehicle</div>
-                <div style="font-weight: 700; color: var(--accent);">
-                    {% if staff.assigned_bus %}{{ staff.assigned_bus.bus_name }}{% else %}No assignment{% endif %}
+                <label class="label">Assigned Vehicle</label>
+                <div style="font-weight: 800; font-size: 1.25rem; color: var(--primary);">
+                    {% if staff.assigned_bus %}
+                        <i class="fas fa-bus-simple" style="margin-right: 8px;"></i> {{ staff.assigned_bus.bus_name }}
+                    {% else %}
+                        <span style="color: var(--text-muted); font-style: italic;">No current assignment</span>
+                    {% endif %}
                 </div>
             </div>
             <div>
-                <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Joined Date</div>
-                <div style="font-weight: 700;">{{ user.date_joined|date:"M d, Y" }}</div>
+                <label class="label">Commission Date</label>
+                <div style="font-weight: 800; font-size: 1.25rem;">{{ user.date_joined|date:"M d, Y" }}</div>
             </div>
         </div>
 
-        <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line);">
-            <h4 style="font-weight: 800; margin-bottom: 16px;">Security</h4>
-            <a href="{% url 'change_password' %}" class="secondary-button" style="display: inline-block;">Change Password</a>
+        <div style="margin-top: 56px; padding: 32px; background: #fafafa; border-radius: var(--radius-md); border: 1px solid var(--line);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; color: var(--text);">
+                <i class="fas fa-circle-info" style="color: var(--primary);"></i>
+                <span style="font-weight: 800;">Staff Notice</span>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+                All operational updates are logged and synced with the central dispatch system. Please ensure your contact details and duty status are always accurate.
+            </p>
         </div>
     </div>
 </div>
 {% endblock %}
+

@@ -1,63 +1,86 @@
 {% extends 'base.html' %}
 
+{% block header_extra %}
+    <div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;">Human Resources</div>
+    <h1 class="page-title" style="margin: 0;">Staff Operations</h1>
+{% endblock %}
+
 {% block content %}
-<div class="page-header">
-    <h1 class="display-title">Staff Operations</h1>
-    <p class="lead">Assign staff members to buses and manage operational roles.</p>
+<div class="card-header" style="margin-bottom: 32px;">
+    <p class="muted-text">Assign staff members to active bus services and manage operational duty status.</p>
 </div>
 
-<div class="glass-panel">
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="text-align: left; border-bottom: 2px solid var(--line);">
-                <th style="padding: 15px;">Staff Member</th>
-                <th style="padding: 15px;">Assigned Bus</th>
-                <th style="padding: 15px;">Status</th>
-                <th style="padding: 15px; text-align: right;">Update Assignment</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for staff in staff_members %}
-                <tr style="border-bottom: 1px solid var(--line);">
-                    <td style="padding: 15px;">
-                        <div style="font-weight: 600;">{{ staff.user.username }}</div>
-                        <div style="font-size: 0.8rem; color: #64748b;">{{ staff.contact_number|default:"No contact info" }}</div>
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div class="table-container" style="border: none; box-shadow: none; border-radius: 0;">
+        <table id="staffTable">
+            <thead>
+                <tr>
+                    <th>Staff Member</th>
+                    <th>Current Assignment</th>
+                    <th>Availability</th>
+                    <th style="text-align: right;">Deployment Control</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for staff in staff_members %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="avatar-circle" style="width: 40px; height: 40px;">
+                                {{ staff.user.username|first|upper }}
+                            </div>
+                            <div>
+                                <div style="font-weight: 800;">{{ staff.user.username }}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">
+                                    <i class="fas fa-phone-alt" style="font-size: 0.7rem;"></i> {{ staff.contact_number|default:"No contact info" }}
+                                </div>
+                            </div>
+                        </div>
                     </td>
-                    <td style="padding: 15px;">
+                    <td>
                         {% if staff.assigned_bus %}
-                            <span style="font-weight: 600; color: #1e293b;">{{ staff.assigned_bus.bus_name }}</span>
-                            <div style="font-size: 0.8rem; color: #64748b;">{{ staff.assigned_bus.source }} → {{ staff.assigned_bus.destination }}</div>
+                            <div style="font-weight: 800; color: var(--text);">{{ staff.assigned_bus.bus_name }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">{{ staff.assigned_bus.source }} &rarr; {{ staff.assigned_bus.destination }}</div>
                         {% else %}
-                            <span style="color: #94a3b8; font-style: italic;">Not assigned</span>
+                            <span style="color: var(--text-muted); font-style: italic; font-size: 0.9rem;">Unassigned</span>
                         {% endif %}
                     </td>
-                    <td style="padding: 15px;">
+                    <td>
                         {% if staff.is_available %}
-                            <span style="color: #166534; background: #dcfce7; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;">Available</span>
+                            <span class="badge badge-success">Available</span>
                         {% else %}
-                            <span style="color: #991b1b; background: #fee2e2; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;">Busy</span>
+                            <span class="badge badge-danger">On Duty</span>
                         {% endif %}
                     </td>
-                    <td style="padding: 15px; text-align: right;">
-                        <form method="post" style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <td style="text-align: right;">
+                        <form method="post" style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
                             {% csrf_token %}
                             <input type="hidden" name="staff_id" value="{{ staff.id }}">
-                            <select name="bus_id" style="padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem;">
-                                <option value="">Select Bus...</option>
+                            <select name="bus_id" class="input" style="padding: 8px 12px; font-size: 0.85rem; width: auto; min-width: 160px; height: 40px;">
+                                <option value="">Select Service...</option>
                                 {% for bus in buses %}
                                     <option value="{{ bus.id }}" {% if staff.assigned_bus.id == bus.id %}selected{% endif %}>{{ bus.bus_name }}</option>
                                 {% endfor %}
                             </select>
-                            <button type="submit" class="primary-button" style="padding: 8px 15px; font-size: 0.85rem;">Assign</button>
+                            <button type="submit" class="btn btn-primary btn-sm" style="height: 40px; padding: 0 16px;">
+                                <i class="fas fa-link"></i> Assign
+                            </button>
                         </form>
                     </td>
                 </tr>
-            {% empty %}
+                {% empty %}
                 <tr>
-                    <td colspan="4" style="padding: 40px; text-align: center; color: var(--text-muted);">No staff profiles found.</td>
+                    <td colspan="4">
+                        <div class="empty-state">
+                            <i class="fas fa-users-slash"></i>
+                            <h3>No Staff Profiles</h3>
+                            <p>All registered staff members will be listed here for assignment.</p>
+                        </div>
+                    </td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
