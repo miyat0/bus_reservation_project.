@@ -58,6 +58,7 @@
                     <tr style="background: rgba(248, 250, 252, 0.8);">
                         <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Passenger</th>
                         <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Seat #</th>
+                        <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Qty</th>
                         <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Current State</th>
                         <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Controls</th>
                     </tr>
@@ -70,6 +71,7 @@
                             <div style="font-size: 0.75rem; color: var(--text-muted);">Booking: #{{ booking.id }}</div>
                         </td>
                         <td style="padding: 20px 32px; font-weight: 800; color: var(--accent);">#{{ booking.seat_number }}</td>
+                        <td style="padding: 20px 32px; font-weight: 700; color: var(--text);">{{ booking.number_of_seats }}</td>
                         <td style="padding: 20px 32px;">
                             <span class="status-pill {% if booking.status == 'Confirmed' %}status-confirmed{% elif booking.status == 'Completed' %}status-completed{% elif booking.status == 'Cancelled' %}status-cancelled{% else %}status-inprogress{% endif %}" style="font-size: 0.75rem; padding: 6px 14px; border-radius: 99px; font-weight: 800;">
                                 {{ booking.status }}
