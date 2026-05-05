@@ -58,7 +58,13 @@ def home(request):
             return redirect('staff_dashboard')
         else:
             return redirect('user_dashboard')
-    return render(request, 'admins/home.html')
+            
+    # Dynamically fetch unique cities from existing fleet data
+    sources = Bus.objects.values_list('source', flat=True).distinct()
+    destinations = Bus.objects.values_list('destination', flat=True).distinct()
+    cities = sorted(list(set(list(sources) + list(destinations))))
+    
+    return render(request, 'admins/home.html', {'cities': cities})
 
 def bus_list(request):
     buses_list = Bus.objects.all().order_by('id')

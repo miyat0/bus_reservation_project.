@@ -185,6 +185,20 @@
         .search-wrapper { padding: 0 16px 24px; }
         .features-grid { grid-template-columns: 1fr; }
     }
+    .search-panel select {
+        border: none;
+        background: transparent;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-main);
+        width: 100%;
+        outline: none;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+    .search-panel select::placeholder { color: var(--text-muted); font-weight: 400; }
+    .search-panel select option { font-weight: 400; color: var(--text-main); }
 </style>
 
 <div class="hero-section">
@@ -208,7 +222,12 @@
                 <label>Leaving From</label>
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <i class="fas fa-location-dot" style="color: var(--primary);"></i>
-                    <input type="text" name="source" placeholder="Source City" required>
+                    <select name="source" required>
+                        <option value="" disabled selected>Source City</option>
+                        {% for city in cities %}
+                            <option value="{{ city }}">{{ city }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <div style="width: 1px; background: var(--line); margin: 20px 0;"></div>
@@ -216,7 +235,12 @@
                 <label>Going To</label>
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <i class="fas fa-map-pin" style="color: var(--primary);"></i>
-                    <input type="text" name="destination" placeholder="Destination City" required>
+                    <select name="destination" required>
+                        <option value="" disabled selected>Destination City</option>
+                        {% for city in cities %}
+                            <option value="{{ city }}">{{ city }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             <div style="width: 1px; background: var(--line); margin: 20px 0;"></div>
