@@ -39,11 +39,14 @@ def my_bookings(request):
     return render(request, 'users/my_bookings.html', {'bookings': bookings})
 
 def search_buses(request):
-    # Only show future or current trips
-    buses = Bus.objects.filter(departure_time__gte=timezone.now()).order_by('departure_time')
+    buses = Bus.objects.all().order_by('departure_time')
     source = request.GET.get('source')
     destination = request.GET.get('destination')
     travel_date = request.GET.get('travel_date')
+    
+    # If no date is searched, default to showing only future trips
+    if not travel_date:
+        buses = buses.filter(departure_time__gte=timezone.now())
     
     if source:
         buses = buses.filter(source__icontains=source)
@@ -52,7 +55,10 @@ def search_buses(request):
     if travel_date:
         buses = buses.filter(departure_time__date=travel_date)
         
-    return render(request, 'users/search_buses.html', {'buses': buses})
+    return render(request, 'users/search_buses.html', {
+        'buses': buses,
+        'current_time': timezone.now()
+    })
 
 from django.utils import timezone
 
