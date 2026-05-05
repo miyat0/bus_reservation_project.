@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-card">
+    <span class="eyebrow">New account</span>
+    <h1 class="section-title">Create User Login</h1>
+
+    <p class="muted-text">Create a username and password so you can sign in and make bookings.</p>
+
+    {% if form.non_field_errors %}
+        <div class="info-card" style="margin-bottom: 18px;">
+            {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.username.id_for_label }}">Username:</label>
+            {{ form.username }}
+            {% for error in form.username.errors %}
+                <div class="muted-text" style="color:#dc2626; margin-bottom: 12px;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <label for="{{ form.password1.id_for_label }}">Password:</label>
+            {{ form.password1 }}
+            {% for error in form.password1.errors %}
+                <div class="muted-text" style="color:#dc2626; margin-bottom: 12px;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <label for="{{ form.password2.id_for_label }}">Password confirmation:</label>
+            {{ form.password2 }}
+            {% for error in form.password2.errors %}
+                <div class="muted-text" style="color:#dc2626; margin-bottom: 12px;">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="cta-row">
+            <button type="submit" class="primary-button" style="border:0;">Create account</button>
+            <a href="{% url 'login' %}" class="secondary-button">Back to login</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

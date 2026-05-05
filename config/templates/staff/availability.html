@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Manage Availability</h1>
+    <p class="muted-text">Toggle your duty status to inform dispatch of your availability.</p>
+</div>
+
+<div class="glass-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+    <div style="width: 100px; height: 100px; background: {% if staff.is_available %}#dcfce7{% else %}#fee2e2{% endif %}; color: {% if staff.is_available %}#10b981{% else %}#ef4444{% endif %}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin: 0 auto 32px;">
+        <i class="fas {% if staff.is_available %}fa-toggle-on{% else %}fa-toggle-off{% endif %}"></i>
+    </div>
+    
+    <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 12px;">
+        Currently: {% if staff.is_available %}Free / On Duty{% else %}Busy / Off Duty{% endif %}
+    </h2>
+    <p style="color: var(--text-muted); font-weight: 600; margin-bottom: 40px;">
+        {% if staff.is_available %}
+            You are currently marked as available for new assignments and trips.
+        {% else %}
+            You are currently marked as busy. Dispatch will not assign new routes to you.
+        {% endif %}
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="primary-button" style="width: 100%; padding: 18px; font-size: 1.1rem; background: {% if staff.is_available %}#0f172a{% else %}#10b981{% endif %};">
+            {% if staff.is_available %}Mark as Busy{% else %}Mark as Available{% endif %}
+        </button>
+    </form>
+    
+    <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+        <i class="fas fa-info-circle"></i> This status affects your visibility in the admin dispatch console.
+    </div>
+</div>
+{% endblock %}

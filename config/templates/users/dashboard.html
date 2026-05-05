@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;">
+    <div>
+        <div style="font-size: 0.9rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Member Dashboard</div>
+        <h1 class="page-title">Hello, {{ user.username }}</h1>
+        <p class="muted-text">Manage your journeys and explore new destinations.</p>
+    </div>
+    <a href="{% url 'search_buses' %}" class="btn-primary" style="padding: 16px 32px;">Book New Trip</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 60px;">
+    <div class="card" style="border-bottom: 4px solid var(--primary);">
+        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Active Bookings</div>
+        <div style="font-size: 2.5rem; font-weight: 900; margin-top: 8px;">{{ active_bookings }}</div>
+    </div>
+    <div class="card" style="border-bottom: 4px solid #3b82f6;">
+        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Trips</div>
+        <div style="font-size: 2.5rem; font-weight: 900; margin-top: 8px;">{{ total_bookings }}</div>
+    </div>
+    <div class="card" style="border-bottom: 4px solid #10b981;">
+        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Quickgo Points</div>
+        <div style="font-size: 2.5rem; font-weight: 900; margin-top: 8px;">1,250</div>
+    </div>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
+        <h2 style="font-size: 1.25rem; font-weight: 800;">Recent Activity</h2>
+        <a href="{% url 'my_bookings' %}" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.9rem;">View All</a>
+    </div>
+    <div style="padding: 0;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; background: #fcfcfc;">
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Service</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Route</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Date</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in recent_bookings %}
+                <tr style="border-top: 1px solid var(--line);">
+                    <td style="padding: 24px 32px; font-weight: 800;">{{ booking.bus.bus_name }}</td>
+                    <td style="padding: 24px 32px; font-weight: 600; color: var(--text-muted);">{{ booking.bus.source }} → {{ booking.bus.destination }}</td>
+                    <td style="padding: 24px 32px; font-weight: 600;">{{ booking.booking_date|date:"M d, Y" }}</td>
+                    <td style="padding: 24px 32px;">
+                        <span style="padding: 6px 16px; border-radius: 99px; font-size: 0.75rem; font-weight: 800; background: {% if booking.status == 'Confirmed' %}#dcfce7{% else %}#f1f5f9{% endif %}; color: {% if booking.status == 'Confirmed' %}#166534{% else %}#475569{% endif %};">
+                            {{ booking.status }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="padding: 60px; text-align: center; color: var(--text-muted);">No recent bookings found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-container" style="max-width: 1000px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <h2>All Bookings (Admin View)</h2>
+    <div style="margin-top: 1rem;">
+        {% if bookings %}
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <thead>
+                    <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                        <th style="padding: 1rem; text-align: left;">Booking ID</th>
+                        <th style="padding: 1rem; text-align: left;">User</th>
+                        <th style="padding: 1rem; text-align: left;">Bus</th>
+                        <th style="padding: 1rem; text-align: left;">Seat No</th>
+                        <th style="padding: 1rem; text-align: left;">Payment</th>
+                        <th style="padding: 1rem; text-align: left;">Date</th>
+                        <th style="padding: 1rem; text-align: left;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr style="border-bottom: 1px solid #dee2e6;">
+                            <td style="padding: 1rem;">#{{ booking.id }}</td>
+                            <td style="padding: 1rem;">{{ booking.user.username }}</td>
+                            <td style="padding: 1rem;">{{ booking.bus.bus_name }} ({{ booking.bus.source }} to {{ booking.bus.destination }})</td>
+                            <td style="padding: 1rem;">{{ booking.seat_number }}</td>
+                            <td style="padding: 1rem;">
+                                {% if booking.is_paid %}
+                                    <span style="color: green; font-weight: bold;">Paid</span>
+                                {% else %}
+                                    <span style="color: orange; font-weight: bold;">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 1rem;">{{ booking.booking_date|date:"M d, Y H:i" }}</td>
+                            <td style="padding: 1rem;">
+                                <a href="{% url 'delete_booking' booking.id %}" style="padding: 6px 12px; font-size: 0.75rem; color: #ef4444; border: 1px solid #fca5a5; background: #fff; border-radius: 8px; font-weight: 700; text-decoration: none;">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: #6c757d; font-style: italic;">No bookings found in the system.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quickgo | Premium Bus Travel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ef4444;
+            --primary-dark: #dc2626;
+            --bg: #f8fafc;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --line: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.5; }
+
+        /* Public Top Navigation */
+        .global-nav {
+            background: #fff;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo i { color: var(--primary); }
+
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-link {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        .nav-link:hover { color: var(--primary); }
+
+        .btn-signup {
+            background: var(--primary);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn-signup:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2); }
+
+        /* Sidebar Navigation */
+        .app-container { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: #fff;
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: 0.2s;
+            margin-bottom: 4px;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background: var(--bg);
+            color: var(--primary);
+        }
+        .sidebar-link i { width: 20px; text-align: center; font-size: 1.1rem; }
+
+        /* Content Areas */
+        .main-content-area { margin-left: 280px; flex: 1; padding: 40px 60px; max-width: 1400px; }
+        .full-width-area { flex: 1; min-height: calc(100vh - 80px); padding: 40px 8%; max-width: 1400px; margin: 0 auto; }
+        
+        .card { background: #fff; border-radius: 24px; padding: 32px; box-shadow: var(--shadow); border: 1px solid var(--line); }
+        .page-title { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+        .muted-text { color: var(--text-muted); font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        
+        {% if user.is_authenticated and request.resolver_match.url_name != 'home' %}
+            <aside class="sidebar">
+                <div style="padding: 32px 24px;">
+                    <a href="{% url 'home' %}" class="logo">
+                        <i class="fas fa-bolt"></i> Quickgo
+                    </a>
+                </div>
+                <div class="sidebar-menu" style="padding: 0 16px; flex: 1; overflow-y: auto;">
+                    {% if user.is_superuser %}
+                        <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 16px 8px 8px; letter-spacing: 0.05em;">Admin Console</div>
+                        <a href="{% url 'admin_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Dashboard</a>
+                        <a href="{% url 'bus_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'bus_list' or request.resolver_match.url_name == 'add_bus' or request.resolver_match.url_name == 'edit_bus' %}active{% endif %}"><i class="fas fa-bus-simple"></i> Services & Fleet</a>
+                        <a href="{% url 'all_bookings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'all_bookings' %}active{% endif %}"><i class="fas fa-ticket-simple"></i> All Bookings</a>
+                        <a href="{% url 'all_users' %}" class="sidebar-link {% if request.resolver_match.url_name == 'all_users' or request.resolver_match.url_name == 'add_staff' %}active{% endif %}"><i class="fas fa-users"></i> Users & Staff</a>
+                        <a href="{% url 'discount_offers' %}" class="sidebar-link {% if request.resolver_match.url_name == 'discount_offers' %}active{% endif %}"><i class="fas fa-tags"></i> Discount Offers</a>
+                    {% elif user.is_staff %}
+                        <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 16px 8px 8px; letter-spacing: 0.05em;">Staff Operations</div>
+                        <a href="{% url 'staff_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'staff_dashboard' %}active{% endif %}"><i class="fas fa-home"></i> Dashboard</a>
+                        <a href="{% url 'staff_schedule' %}" class="sidebar-link {% if request.resolver_match.url_name == 'staff_schedule' %}active{% endif %}"><i class="fas fa-calendar-day"></i> Trip Schedule</a>
+                        <a href="{% url 'staff_availability' %}" class="sidebar-link {% if request.resolver_match.url_name == 'staff_availability' %}active{% endif %}"><i class="fas fa-clock"></i> Duty Status</a>
+                        <a href="{% url 'staff_profile' %}" class="sidebar-link {% if request.resolver_match.url_name == 'staff_profile' %}active{% endif %}"><i class="fas fa-id-card"></i> My Profile</a>
+                    {% else %}
+                        <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 16px 8px 8px; letter-spacing: 0.05em;">Traveler Portal</div>
+                        <a href="{% url 'user_dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}"><i class="fas fa-columns"></i> Dashboard</a>
+                        <a href="{% url 'search_buses' %}" class="sidebar-link {% if request.resolver_match.url_name == 'search_buses' %}active{% endif %}"><i class="fas fa-search"></i> Search & Book</a>
+                        <a href="{% url 'my_bookings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_bookings' %}active{% endif %}"><i class="fas fa-ticket"></i> My Bookings</a>
+                        <a href="{% url 'user_profile' %}" class="sidebar-link {% if request.resolver_match.url_name == 'user_profile' %}active{% endif %}"><i class="fas fa-user-gear"></i> Account Profile</a>
+                    {% endif %}
+                </div>
+                <div style="padding: 24px; border-top: 1px solid var(--line);">
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" style="background: none; border: none; cursor: pointer; color: var(--text); font-weight: 700; width: 100%; text-align: left; padding: 12px 16px; border-radius: 12px; transition: 0.2s;" onmouseover="this.style.background='#fef2f2'; this.style.color='#ef4444';" onmouseout="this.style.background='transparent'; this.style.color='var(--text)';">
+                            <i class="fas fa-power-off" style="margin-right: 8px;"></i> Sign Out
+                        </button>
+                    </form>
+                </div>
+            </aside>
+        {% endif %}
+
+        <div class="{% if user.is_authenticated and request.resolver_match.url_name != 'home' %}main-content-area{% else %}full-width-area{% endif %}">
+            
+            {% if not user.is_authenticated or request.resolver_match.url_name == 'home' %}
+                <!-- Public Top Navigation -->
+                <nav class="global-nav" style="margin: -40px -8.7% 40px; padding: 0 8%;">
+                    <a href="{% url 'home' %}" class="logo">
+                        <i class="fas fa-bolt"></i> Quickgo
+                    </a>
+                    <div class="nav-links">
+                        <a href="{% url 'home' %}" class="nav-link">Home</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'search_buses' %}" class="nav-link">Search</a>
+                            <a href="{% url 'my_bookings' %}" class="nav-link">My Bookings</a>
+                            {% if user.is_superuser %}
+                                <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
+                            {% elif user.is_staff %}
+                                <a href="{% url 'staff_dashboard' %}" class="nav-link">Dashboard</a>
+                            {% else %}
+                                <a href="{% url 'user_dashboard' %}" class="nav-link">Dashboard</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}" class="nav-link">Login</a>
+                            <a href="{% url 'signup' %}" class="btn-signup">Sign up</a>
+                        {% endif %}
+                    </div>
+                </nav>
+            {% else %}
+                <!-- Internal Portal Header -->
+                <header style="display: flex; justify-content: flex-end; align-items: center; padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid var(--line);">
+                    <div style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 8px 20px 8px 8px; border-radius: 99px; border: 1px solid var(--line); box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem;">
+                            {{ user.username|first|upper }}
+                        </div>
+                        <div style="display: flex; flex-direction: column; justify-content: center;">
+                            <span style="font-weight: 800; font-size: 0.9rem; line-height: 1;">{{ user.username }}</span>
+                            <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 2px;">
+                                {% if user.is_superuser %}Administrator{% elif user.is_staff %}Staff Member{% else %}Traveler{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </header>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="padding: 16px 24px; background: #fff; border-radius: 12px; border: 1px solid #eee; margin-bottom: 24px; border-left: 4px solid {% if message.tags == 'error' %}var(--primary){% else %}#10b981{% endif %}; font-weight: 600;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

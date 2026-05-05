@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+    <div>
+        <h1 class="page-title">Operational Hub</h1>
+        <p class="muted-text">Real-time service manifest and duty controls.</p>
+    </div>
+    
+    <div style="background: #fff; padding: 12px 24px; border-radius: 20px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 16px; border: 1px solid var(--line);">
+        <div>
+            <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Duty Status</div>
+            <div style="font-size: 1.1rem; font-weight: 800; color: {% if staff.is_available %}#10b981{% else %}#ef4444{% endif %};">
+                <i class="fas {% if staff.is_available %}fa-circle-check{% else %}fa-circle-xmark{% endif %}"></i> 
+                {% if staff.is_available %}Ready for Duty{% else %}Currently Busy{% endif %}
+            </div>
+        </div>
+        <form method="post" action="{% url 'toggle_availability' %}">
+            {% csrf_token %}
+            <button type="submit" class="primary-button" style="padding: 10px 16px; font-size: 0.8rem; background: #0f172a;">Toggle State</button>
+        </form>
+    </div>
+</div>
+
+<div class="stat-grid" style="margin-top: 32px; grid-template-columns: repeat(3, 1fr);">
+    <div class="glass-card" style="padding: 24px; border-left: 4px solid var(--primary);">
+        <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Service Assignment</div>
+        <div style="font-size: 1.4rem; font-weight: 800; margin-top: 8px;">{% if assigned_bus %}{{ assigned_bus.bus_name }}{% else %}Standby{% endif %}</div>
+        {% if assigned_bus %}
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">{{ assigned_bus.source }} → {{ assigned_bus.destination }}</div>
+        {% endif %}
+    </div>
+    <div class="glass-card" style="padding: 24px;">
+        <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Manifest Load</div>
+        <div style="font-size: 1.4rem; font-weight: 800; margin-top: 8px;">{{ passengers.count }}</div>
+        <div style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">Confirmed Passengers</div>
+    </div>
+    <div class="glass-card" style="padding: 24px;">
+        <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">System State</div>
+        <div style="font-size: 1.4rem; font-weight: 800; margin-top: 8px; color: #10b981;">Operational</div>
+        <div style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">All services active</div>
+    </div>
+</div>
+
+{% if assigned_bus %}
+    <div class="glass-card" style="margin-top: 40px; padding: 0; overflow: hidden;">
+        <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: rgba(248, 250, 252, 0.4);">
+            <h2 class="section-title" style="margin: 0; font-size: 1.25rem;">Passenger List</h2>
+            <div style="padding: 8px 16px; background: #fff; border: 1px solid var(--line); border-radius: 10px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted);">
+                Service: <span style="color: var(--primary);">{{ assigned_bus.bus_name }}</span>
+            </div>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background: rgba(248, 250, 252, 0.8);">
+                        <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Passenger</th>
+                        <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Seat #</th>
+                        <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Current State</th>
+                        <th style="padding: 20px 32px; font-weight: 700; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Controls</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in passengers %}
+                    <tr style="border-bottom: 1px solid var(--line); transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.6)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 20px 32px;">
+                            <div style="font-weight: 800; font-size: 0.95rem;">{{ booking.user.username }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Booking: #{{ booking.id }}</div>
+                        </td>
+                        <td style="padding: 20px 32px; font-weight: 800; color: var(--accent);">#{{ booking.seat_number }}</td>
+                        <td style="padding: 20px 32px;">
+                            <span class="status-pill {% if booking.status == 'Confirmed' %}status-confirmed{% elif booking.status == 'Completed' %}status-completed{% elif booking.status == 'Cancelled' %}status-cancelled{% else %}status-inprogress{% endif %}" style="font-size: 0.75rem; padding: 6px 14px; border-radius: 99px; font-weight: 800;">
+                                {{ booking.status }}
+                            </span>
+                        </td>
+                        <td style="padding: 20px 32px;">
+                            <form method="post" action="{% url 'update_booking_status' booking.id %}" style="display: flex; gap: 8px; align-items: center;">
+                                {% csrf_token %}
+                                <select name="status" style="padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); font-size: 0.8rem; background: #fff; font-weight: 700; min-width: 130px;">
+                                    <option value="Confirmed" {% if booking.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                                    <option value="In-progress" {% if booking.status == 'In-progress' %}selected{% endif %}>Boarded</option>
+                                    <option value="Completed" {% if booking.status == 'Completed' %}selected{% endif %}>Arrived</option>
+                                    <option value="Cancelled" {% if booking.status == 'Cancelled' %}selected{% endif %}>No Show</option>
+                                </select>
+                                <button type="submit" class="primary-button" style="padding: 8px 14px; font-size: 0.75rem; box-shadow: none;">Set</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="padding: 60px; text-align: center;">
+                            <i class="fas fa-users-slash" style="font-size: 2.5rem; color: var(--line); margin-bottom: 16px; display: block;"></i>
+                            <span style="color: var(--text-muted); font-weight: 700;">No active bookings found for this unit.</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="glass-card" style="text-align: center; padding: 100px 40px; margin-top: 40px; border-style: dashed;">
+         <i class="fas fa-bus-slash" style="font-size: 4rem; color: var(--line); margin-bottom: 24px;"></i>
+         <h3 style="font-size: 1.8rem; font-weight: 800;">Awaiting Assignment</h3>
+         <p class="muted-text" style="max-width: 450px; margin: 12px auto; font-weight: 600;">Administrators are currently organizing the service schedule. Your assignment will appear here soon.</p>
+    </div>
+{% endif %}
+
+<style>
+.status-confirmed { background: #dcfce7; color: #166534; }
+.status-inprogress { background: #e0f2fe; color: #0369a1; }
+.status-completed { background: #f1f5f9; color: #475569; }
+.status-cancelled { background: #fee2e2; color: #991b1b; }
+</style>
+{% endblock %}

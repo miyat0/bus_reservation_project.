@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Add New Staff Member</h1>
+    <p class="muted-text">Create a new operational account and assign them to a service.</p>
+</div>
+
+<div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+    <form method="post" style="display: flex; flex-direction: column; gap: 24px;">
+        {% csrf_token %}
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem;">Username</label>
+                <input type="text" name="username" required style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--line); font-weight: 600;">
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem;">Email Address</label>
+                <input type="email" name="email" required style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--line); font-weight: 600;">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem;">Password</label>
+                <input type="password" name="password" required style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--line); font-weight: 600;">
+            </div>
+            <div class="form-group">
+                <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem;">Contact Number</label>
+                <input type="text" name="contact_number" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--line); font-weight: 600;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem;">Assign to Bus Service (Optional)</label>
+            <select name="bus_id" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--line); font-weight: 600; background: #fff;">
+                <option value="">-- No Assignment --</option>
+                {% for bus in buses %}
+                    <option value="{{ bus.id }}">{{ bus.bus_name }} ({{ bus.source }} → {{ bus.destination }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="display: flex; gap: 16px; margin-top: 12px;">
+            <button type="submit" class="primary-button" style="flex: 1; padding: 16px;">Create Staff Account</button>
+            <a href="{% url 'all_users' %}" class="secondary-button" style="flex: 1; text-align: center; padding: 16px;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

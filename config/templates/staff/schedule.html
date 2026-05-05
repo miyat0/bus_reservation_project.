@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Daily Schedule</h1>
+    <p class="muted-text">Track your assigned trips and timing for today.</p>
+</div>
+
+{% if staff.assigned_bus %}
+    <div class="glass-card" style="padding: 0; overflow: hidden;">
+        <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); background: #f8fafc;">
+            <h2 style="font-size: 1.1rem; font-weight: 800;">Current Assignment: {{ staff.assigned_bus.bus_name }}</h2>
+        </div>
+        <div style="padding: 40px;">
+            <div style="display: flex; align-items: center; gap: 40px; margin-bottom: 40px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 800;">08:00</div>
+                    <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Departure</div>
+                    <div style="font-weight: 700; margin-top: 8px;">{{ staff.assigned_bus.source }}</div>
+                </div>
+                <div style="flex: 1; height: 2px; background: dashed var(--line); position: relative;">
+                    <i class="fas fa-bus" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: var(--primary);"></i>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 800;">14:00</div>
+                    <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Arrival</div>
+                    <div style="font-weight: 700; margin-top: 8px;">{{ staff.assigned_bus.destination }}</div>
+                </div>
+            </div>
+            
+            <div style="background: #f1f5f9; padding: 24px; border-radius: 20px; border: 1px solid var(--line);">
+                <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 16px;"><i class="fas fa-circle-info"></i> Today's Instructions</h3>
+                <ul style="padding-left: 20px; color: var(--text-muted); font-weight: 600; display: flex; flex-direction: column; gap: 8px;">
+                    <li>Ensure all safety checks are completed before 07:45.</li>
+                    <li>Verify passenger IDs against the manifest.</li>
+                    <li>Update trip status to 'In-progress' upon departure.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="glass-card" style="text-align: center; padding: 80px;">
+        <i class="fas fa-calendar-xmark" style="font-size: 3rem; color: var(--line); margin-bottom: 24px;"></i>
+        <h3 style="font-size: 1.5rem; font-weight: 800;">No Schedule Assigned</h3>
+        <p class="muted-text">You currently have no active trips scheduled for today. Contact dispatch for assignments.</p>
+    </div>
+{% endif %}
+{% endblock %}

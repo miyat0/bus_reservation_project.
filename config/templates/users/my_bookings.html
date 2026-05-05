@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;">
+    <div>
+        <div style="font-size: 0.9rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Reservation History</div>
+        <h1 class="page-title">My Bookings</h1>
+        <p class="muted-text">Track your upcoming trips and past reservations.</p>
+    </div>
+    <a href="{% url 'search_buses' %}" class="btn-primary" style="padding: 16px 32px;">Book New Trip</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 32px;">
+    {% for booking in bookings %}
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
+                <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 800;">{{ booking.bus.bus_name }}</h3>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Ref: #QG-{{ booking.id|stringformat:"05d" }}</div>
+                </div>
+                <span style="padding: 6px 16px; border-radius: 99px; font-size: 0.75rem; font-weight: 800; background: {% if booking.status == 'Confirmed' %}#dcfce7{% elif booking.status == 'Cancelled' %}#fef2f2{% else %}#f1f5f9{% endif %}; color: {% if booking.status == 'Confirmed' %}#166534{% elif booking.status == 'Cancelled' %}#991b1b{% else %}#475569{% endif %};">
+                    {{ booking.status }}
+                </span>
+            </div>
+            <div style="padding: 32px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                    <div>
+                        <div style="font-weight: 800; font-size: 1.1rem;">{{ booking.bus.source }}</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Origin</div>
+                    </div>
+                    <i class="fas fa-arrow-right" style="color: var(--line);"></i>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 800; font-size: 1.1rem;">{{ booking.bus.destination }}</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Destination</div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; padding: 16px; background: #f8fafc; border-radius: 12px; margin-bottom: 24px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Seat</div>
+                        <div style="font-weight: 800;">#{{ booking.seat_number }}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Date</div>
+                        <div style="font-weight: 800;">{{ booking.booking_date|date:"M d" }}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">Fare</div>
+                        <div style="font-weight: 800; color: #10b981;">${{ booking.bus.price }}</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    {% if booking.status == 'Confirmed' %}
+                        <form method="post" action="{% url 'cancel_booking' booking.id %}" style="flex: 1;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-primary" style="width: 100%; background: transparent; color: #ef4444; border: 1px solid #fca5a5; font-size: 0.85rem;">Cancel Trip</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="card" style="grid-column: 1/-1; text-align: center; padding: 100px; border-style: dashed;">
+            <i class="fas fa-ticket-alt" style="font-size: 4rem; color: var(--line); margin-bottom: 24px;"></i>
+            <h2 style="font-weight: 800; margin-bottom: 8px;">No Reservations Yet</h2>
+            <p class="muted-text">Your upcoming journeys will appear here once you book them.</p>
+            <a href="{% url 'search_buses' %}" class="btn-primary" style="margin-top: 32px; display: inline-block;">Start Booking</a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

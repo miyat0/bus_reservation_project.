@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;">
+    <div>
+        <div style="font-size: 0.9rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Fleet Management</div>
+        <h1 class="page-title">Operational Services</h1>
+        <p class="muted-text">Manage your bus routes, schedules, and active services.</p>
+    </div>
+    <a href="{% url 'add_bus' %}" class="btn-primary" style="padding: 16px 32px;">Add New Service</a>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); background: #fafafa;">
+        <form method="get" style="display: flex; gap: 16px; align-items: center;">
+            <input type="text" name="source" placeholder="Source" style="padding: 12px 20px; border-radius: 12px; border: 1px solid var(--line); flex: 1; font-weight: 700;">
+            <input type="text" name="destination" placeholder="Destination" style="padding: 12px 20px; border-radius: 12px; border: 1px solid var(--line); flex: 1; font-weight: 700;">
+            <button type="submit" class="btn-primary">Filter Fleet</button>
+        </form>
+    </div>
+    <div style="padding: 0;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; background: #fcfcfc;">
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Service Name</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Route</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Capacity</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Price</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bus in buses %}
+                <tr style="border-top: 1px solid var(--line);">
+                    <td style="padding: 24px 32px; font-weight: 800;">{{ bus.bus_name }}</td>
+                    <td style="padding: 24px 32px; font-weight: 700; color: var(--text-muted);">{{ bus.source }} → {{ bus.destination }}</td>
+                    <td style="padding: 24px 32px; font-weight: 700;">{{ bus.total_seats }} Seats</td>
+                    <td style="padding: 24px 32px; font-weight: 900; color: #10b981;">${{ bus.price }}</td>
+                    <td style="padding: 24px 32px;">
+                        <div style="display: flex; gap: 12px;">
+                            <a href="{% url 'edit_bus' bus.id %}" style="color: var(--primary); text-decoration: none; font-weight: 700;">Edit</a>
+                            <a href="{% url 'delete_bus' bus.id %}" style="color: #ef4444; text-decoration: none; font-weight: 700;">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 60px; text-align: center; color: var(--text-muted);">No services found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

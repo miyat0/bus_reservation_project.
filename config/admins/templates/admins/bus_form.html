@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section style="max-width: 800px; margin: 0 auto;">
+    <div class="page-header">
+        <h1 class="section-title">{{ title }}</h1>
+        <p class="muted-text">Update bus details and schedule.</p>
+    </div>
+
+    <div class="glass-panel" style="padding: 40px;">
+        {% if form.errors %}
+            <div style="background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+                <div style="font-weight: 800; margin-bottom: 4px;">Please correct the following errors:</div>
+                <ul style="padding-left: 20px; font-weight: 600; font-size: 0.9rem;">
+                    {% for field, errors in form.errors.items %}
+                        <li>{{ field|title }}: {{ errors|striptags }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div style="grid-column: span 2;">
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Service Name</label>
+                    {{ form.bus_name }}
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Origin City</label>
+                    {{ form.source }}
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Destination City</label>
+                    {{ form.destination }}
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Total Capacity</label>
+                    {{ form.total_seats }}
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Initial Availability</label>
+                    {{ form.available_seats }}
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Service Price ($)</label>
+                    {{ form.price }}
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-muted);">Departure Schedule</label>
+                    {{ form.departure_time }}
+                </div>
+                <div style="grid-column: span 2; margin-top: 32px; display: flex; flex-direction: column; gap: 12px;">
+                    <button type="submit" class="primary-button" style="width: 100%; padding: 18px; font-size: 1.1rem;">Confirm Service Details</button>
+                    <a href="{% url 'bus_list' %}" class="secondary-button" style="width: 100%; display: block; text-align: center; text-decoration: none; padding: 14px;">Back to List</a>
+                </div>
+            </div>
+        </form>
+        
+        {% if form.instance.pk %}
+            <div style="margin-top: 12px;">
+                <form method="post" action="{% url 'delete_bus' form.instance.id %}" onsubmit="return confirm('Archive this service?');">
+                    {% csrf_token %}
+                    <button type="submit" class="secondary-button" style="width: 100%; color: #ef4444; border-color: #fca5a5; padding: 14px;">Delete Service</button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+    input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; }
+    ul.errorlist { color: #dc2626; list-style: none; padding: 0; margin-bottom: 10px; font-size: 0.9rem; }
+</style>
+{% endblock %}

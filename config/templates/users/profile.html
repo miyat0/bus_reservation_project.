@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Personal Profile</h1>
+    <p class="muted-text">Manage your account and view your travel history.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 40px;">
+    <!-- Profile Sidebar -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div class="glass-card" style="text-align: center;">
+            <div style="width: 100px; height: 100px; background: var(--primary-soft); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px;">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">{{ user.username }}</h2>
+            <p style="color: var(--text-muted); font-weight: 700; font-size: 0.9rem; margin-bottom: 24px;">Traveler Member</p>
+            <div style="height: 1px; background: var(--line); margin-bottom: 24px;"></div>
+            <div style="text-align: left; display: flex; flex-direction: column; gap: 16px;">
+                <div>
+                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Joined</div>
+                    <div style="font-weight: 700;">{{ user.date_joined|date:"F Y" }}</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Trips Taken</div>
+                    <div style="font-weight: 700;">{{ bookings.count }} Journeys</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass-card" style="background: var(--sidebar-bg); color: #fff; border: none;">
+            <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 12px;">Security</h3>
+            <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 20px;">Keep your account secure by updating your password regularly.</p>
+            <a href="{% url 'change_password' %}" class="primary-button" style="display: block; text-align: center; font-size: 0.9rem;">Change Password</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="display: flex; flex-direction: column; gap: 40px;">
+        <div class="glass-card">
+            <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 32px;">Account Information</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                <div>
+                    <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Email Address</div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">{{ user.email|default:"Not verified" }}</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Contact Phone</div>
+                    <div style="font-weight: 700; font-size: 1.1rem;">Not provided</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); background: #f8fafc;">
+                <h3 style="font-size: 1.1rem; font-weight: 800;">Recent Travel Log</h3>
+            </div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f8fafc; text-align: left;">
+                            <th style="padding: 16px 32px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Route</th>
+                            <th style="padding: 16px 32px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Date</th>
+                            <th style="padding: 16px 32px; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for b in bookings|slice:":5" %}
+                        <tr style="border-bottom: 1px solid var(--line);">
+                            <td style="padding: 16px 32px; font-weight: 700;">{{ b.bus.source }} → {{ b.bus.destination }}</td>
+                            <td style="padding: 16px 32px; font-weight: 600; color: var(--text-muted);">{{ b.booking_date|date:"M d, Y" }}</td>
+                            <td style="padding: 16px 32px;">
+                                <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ b.status }}</span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" style="padding: 32px; text-align: center; color: var(--text-muted); font-weight: 600;">No trips recorded yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

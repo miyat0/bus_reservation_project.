@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="display-title">Staff Operations</h1>
+    <p class="lead">Assign staff members to buses and manage operational roles.</p>
+</div>
+
+<div class="glass-panel">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="text-align: left; border-bottom: 2px solid var(--line);">
+                <th style="padding: 15px;">Staff Member</th>
+                <th style="padding: 15px;">Assigned Bus</th>
+                <th style="padding: 15px;">Status</th>
+                <th style="padding: 15px; text-align: right;">Update Assignment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in staff_members %}
+                <tr style="border-bottom: 1px solid var(--line);">
+                    <td style="padding: 15px;">
+                        <div style="font-weight: 600;">{{ staff.user.username }}</div>
+                        <div style="font-size: 0.8rem; color: #64748b;">{{ staff.contact_number|default:"No contact info" }}</div>
+                    </td>
+                    <td style="padding: 15px;">
+                        {% if staff.assigned_bus %}
+                            <span style="font-weight: 600; color: #1e293b;">{{ staff.assigned_bus.bus_name }}</span>
+                            <div style="font-size: 0.8rem; color: #64748b;">{{ staff.assigned_bus.source }} → {{ staff.assigned_bus.destination }}</div>
+                        {% else %}
+                            <span style="color: #94a3b8; font-style: italic;">Not assigned</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 15px;">
+                        {% if staff.is_available %}
+                            <span style="color: #166534; background: #dcfce7; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;">Available</span>
+                        {% else %}
+                            <span style="color: #991b1b; background: #fee2e2; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;">Busy</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 15px; text-align: right;">
+                        <form method="post" style="display: flex; gap: 10px; justify-content: flex-end;">
+                            {% csrf_token %}
+                            <input type="hidden" name="staff_id" value="{{ staff.id }}">
+                            <select name="bus_id" style="padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem;">
+                                <option value="">Select Bus...</option>
+                                {% for bus in buses %}
+                                    <option value="{{ bus.id }}" {% if staff.assigned_bus.id == bus.id %}selected{% endif %}>{{ bus.bus_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="primary-button" style="padding: 8px 15px; font-size: 0.85rem;">Assign</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" style="padding: 40px; text-align: center; color: var(--text-muted);">No staff profiles found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

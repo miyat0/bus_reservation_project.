@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px;">
+    <div>
+        <div style="font-size: 0.9rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Admin Control Center</div>
+        <h1 class="page-title">Executive Overview</h1>
+        <p class="muted-text">Monitor system health and operational metrics.</p>
+    </div>
+    <div style="display: flex; gap: 16px;">
+        <a href="{% url 'add_bus' %}" class="btn-primary" style="padding: 16px 32px;">Add Service</a>
+        <a href="{% url 'add_staff' %}" class="btn-primary" style="padding: 16px 32px; background: var(--text-main);">Add Staff</a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 60px;">
+    <div class="card">
+        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Fleet Size</div>
+        <div style="font-size: 2rem; font-weight: 900; margin-top: 8px;">{{ buses_count }}</div>
+        <a href="{% url 'bus_list' %}" style="font-size: 0.8rem; color: var(--primary); font-weight: 700; text-decoration: none; margin-top: 12px; display: block;">Manage Fleet →</a>
+    </div>
+    <div class="card">
+        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Active Bookings</div>
+        <div style="font-size: 2rem; font-weight: 900; margin-top: 8px;">{{ bookings_count }}</div>
+        <a href="{% url 'all_bookings' %}" style="font-size: 0.8rem; color: var(--primary); font-weight: 700; text-decoration: none; margin-top: 12px; display: block;">Track Bookings →</a>
+    </div>
+    <div class="card">
+        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Staff Force</div>
+        <div style="font-size: 2rem; font-weight: 900; margin-top: 8px;">{{ staff_count }}</div>
+        <a href="{% url 'all_users' %}" style="font-size: 0.8rem; color: var(--primary); font-weight: 700; text-decoration: none; margin-top: 12px; display: block;">Manage Staff →</a>
+    </div>
+    <div class="card" style="background: linear-gradient(135deg, #fef2f2 0%, #fff 100%); border-color: #fee2e2;">
+        <div class="muted-text" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #ef4444;">Promo Engine</div>
+        <div style="font-size: 2rem; font-weight: 900; margin-top: 8px; color: #ef4444;">Active</div>
+        <a href="{% url 'discount_offers' %}" style="font-size: 0.8rem; color: #ef4444; font-weight: 700; text-decoration: underline; margin-top: 12px; display: block;">Manage Offers →</a>
+    </div>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
+        <h2 style="font-size: 1.25rem; font-weight: 800;">Recent Transactions</h2>
+        <div style="display: flex; gap: 8px;">
+            <a href="?status=Confirmed" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.75rem; font-weight: 700; text-decoration: none; color: var(--text-main);">Confirmed</a>
+            <a href="?status=Completed" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.75rem; font-weight: 700; text-decoration: none; color: var(--text-main);">Completed</a>
+        </div>
+    </div>
+    <div style="padding: 0;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; background: #fcfcfc;">
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">User</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Service</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Date</th>
+                    <th style="padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in recent_bookings %}
+                <tr style="border-top: 1px solid var(--line);">
+                    <td style="padding: 24px 32px;">
+                        <div style="font-weight: 800;">{{ booking.user.username }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ booking.user.email }}</div>
+                    </td>
+                    <td style="padding: 24px 32px; font-weight: 700; color: var(--primary);">{{ booking.bus.bus_name }}</td>
+                    <td style="padding: 24px 32px; font-weight: 600;">{{ booking.booking_date|date:"M d, Y" }}</td>
+                    <td style="padding: 24px 32px;">
+                        <span style="padding: 6px 16px; border-radius: 99px; font-size: 0.75rem; font-weight: 800; background: {% if booking.status == 'Confirmed' %}#dcfce7{% else %}#f1f5f9{% endif %}; color: {% if booking.status == 'Confirmed' %}#166534{% else %}#475569{% endif %};">
+                            {{ booking.status }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="padding: 60px; text-align: center; color: var(--text-muted);">No recent transactions.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

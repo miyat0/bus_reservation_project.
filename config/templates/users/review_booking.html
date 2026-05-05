@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section style="max-width: 600px; margin: 0 auto;">
+    <div class="page-header" style="text-align: center;">
+        <h1 class="section-title">Rate Your Journey</h1>
+        <p class="muted-text">How was your trip with {{ booking.bus.bus_name }}?</p>
+    </div>
+
+    <div class="review-card" style="background: white; padding: 30px; border-radius: 18px; border: 1px solid var(--line);">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 12px;">Rating (1-5 Stars)</label>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <input type="number" name="rating" min="1" max="5" required style="width: 80px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; text-align: center; font-size: 1.2rem; font-weight: 700;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 12px;">Review Comments</label>
+                <textarea name="review" rows="4" placeholder="Share your experience..." style="width: 100%; padding: 15px; border: 1px solid #cbd5e1; border-radius: 12px; font-family: inherit; font-size: 1rem;"></textarea>
+            </div>
+
+            <button type="submit" class="primary-button" style="width: 100%; padding: 14px; border-radius: 12px;">Submit Review</button>
+        </form>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="{% url 'user_dashboard' %}" style="color: #64748b; text-decoration: none; font-size: 0.9rem;">Skip for now</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
