@@ -67,12 +67,15 @@ def update_booking_status(request, booking_id):
                 booking.status = new_status
                 booking.save()
                 
+                messages.success(request, f"Passenger {booking.user.username}'s status updated to {new_status}")
+
                 # If status becomes cancelled, free the seat
                 if new_status == 'Cancelled':
                     bus = booking.bus
                     bus.available_seats += 1
                     bus.save()
                     booking.delete()
+                    messages.warning(request, "Booking cancelled and seat released.")
                     
         return redirect('staff_dashboard')
     return HttpResponseForbidden()
@@ -85,5 +88,6 @@ def add_booking_notes(request, booking_id):
             notes = request.POST.get('notes')
             booking.notes = notes
             booking.save()
+            messages.success(request, f"Notes added for {booking.user.username}")
         return redirect('staff_dashboard')
     return HttpResponseForbidden()
