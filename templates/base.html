@@ -326,6 +326,32 @@
 </head>
 <body>
     
+    {% if not user.is_authenticated or request.resolver_match.url_name == 'home' %}
+        <nav class="global-nav">
+            <a href="{% url 'home' %}" class="logo">
+                <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+                <span>Quick<b>go</b></span>
+            </a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'search_buses' %}" class="nav-link">Search</a>
+                    <a href="{% url 'my_bookings' %}" class="nav-link">My Bookings</a>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
+                    {% elif user.is_staff %}
+                        <a href="{% url 'staff_dashboard' %}" class="nav-link">Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'user_dashboard' %}" class="nav-link">Dashboard</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Login</a>
+                    <a href="{% url 'signup' %}" class="btn btn-primary btn-sm" style="height: 40px; white-space: nowrap;">Sign up</a>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+
     <div class="app-container">
         
         {% if user.is_authenticated and request.resolver_match.url_name != 'home' %}
@@ -368,31 +394,6 @@
             </aside>
         {% endif %}
 
-        {% if not user.is_authenticated or request.resolver_match.url_name == 'home' %}
-            <nav class="global-nav">
-                <a href="{% url 'home' %}" class="logo">
-                    <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-                    <span>Quick<b>go</b></span>
-                </a>
-                <div class="nav-links">
-                    <a href="{% url 'home' %}" class="nav-link">Home</a>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'search_buses' %}" class="nav-link">Search</a>
-                        <a href="{% url 'my_bookings' %}" class="nav-link">My Bookings</a>
-                        {% if user.is_superuser %}
-                            <a href="{% url 'admin_dashboard' %}" class="nav-link">Dashboard</a>
-                        {% elif user.is_staff %}
-                            <a href="{% url 'staff_dashboard' %}" class="nav-link">Dashboard</a>
-                        {% else %}
-                            <a href="{% url 'user_dashboard' %}" class="nav-link">Dashboard</a>
-                        {% endif %}
-                    {% else %}
-                        <a href="{% url 'login' %}" class="nav-link">Login</a>
-                        <a href="{% url 'signup' %}" class="btn btn-primary btn-sm" style="height: 40px; white-space: nowrap;">Sign up</a>
-                    {% endif %}
-                </div>
-            </nav>
-        {% endif %}
 
         <div class="{% if user.is_authenticated and request.resolver_match.url_name != 'home' %}main-content{% else %}full-width{% endif %}">
             
