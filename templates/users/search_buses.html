@@ -7,106 +7,121 @@
 
 {% block content %}
 <section>
-    <div class="card" style="margin-bottom: 40px; padding: 32px;">
-        <form method="get" action="{% url 'search_buses' %}" style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
-            <div style="flex: 2; min-width: 250px;" class="form-group">
-                <label class="label"><i class="fas fa-location-dot" style="margin-right: 6px; color: var(--primary);"></i> From</label>
-                <input type="text" name="source" value="{{ request.GET.source }}" placeholder="Departure City" class="input">
+    <!-- Modern Search Bar -->
+    <div class="card" style="margin-bottom: 48px; padding: 24px 32px; border-radius: 32px; box-shadow: 0 20px 50px rgba(0,0,0,0.06);">
+        <form method="get" action="{% url 'search_buses' %}" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+            <div style="flex: 1; min-width: 200px; position: relative;">
+                <i class="fas fa-location-dot" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
+                <input type="text" name="source" value="{{ request.GET.source }}" placeholder="From City" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa;">
             </div>
-            <div style="flex: 2; min-width: 250px;" class="form-group">
-                <label class="label"><i class="fas fa-map-pin" style="margin-right: 6px; color: var(--primary);"></i> To</label>
-                <input type="text" name="destination" value="{{ request.GET.destination }}" placeholder="Arrival City" class="input">
+            
+            <div style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--primary-light); color: var(--primary);">
+                <i class="fas fa-arrow-right-long"></i>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" style="height: 52px; padding: 0 40px;">
-                    <i class="fas fa-search"></i> Search Routes
+
+            <div style="flex: 1; min-width: 200px; position: relative;">
+                <i class="fas fa-map-pin" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
+                <input type="text" name="destination" value="{{ request.GET.destination }}" placeholder="To City" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa;">
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button type="submit" class="btn btn-primary" style="height: 56px; border-radius: 20px; padding: 0 32px;">
+                    <i class="fas fa-search"></i> <span style="margin-left: 4px;">Search</span>
                 </button>
+                {% if request.GET.source or request.GET.destination %}
+                <a href="{% url 'search_buses' %}" class="btn btn-secondary" style="height: 56px; width: 56px; border-radius: 20px; padding: 0; justify-content: center;">
+                    <i class="fas fa-xmark"></i>
+                </a>
+                {% endif %}
             </div>
-            {% if request.GET.source or request.GET.destination %}
-            <div class="form-group">
-                <a href="{% url 'search_buses' %}" class="btn btn-secondary" style="height: 52px;">Clear</a>
-            </div>
-            {% endif %}
         </form>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 32px;">
+    <!-- Result Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 32px;">
         {% for bus in buses %}
-            <article class="card" style="padding: 0; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow)';">
-                <div style="padding: 24px 32px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
+            <article class="card" style="padding: 0; border-radius: 28px; overflow: hidden; border: 1px solid #f1f5f9; transition: all 0.3s ease;">
+                <!-- Header -->
+                <div style="padding: 24px 28px; background: #fafafa; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <i class="fas fa-bus-simple" style="color: var(--primary); font-size: 1.2rem;"></i>
-                        <h2 style="font-size: 1.1rem; font-weight: 800; margin: 0;">{{ bus.bus_name }}</h2>
+                        <div style="width: 40px; height: 40px; border-radius: 12px; background: #fff; border: 1px solid #eee; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-bus" style="color: var(--primary);"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 800; font-size: 1rem;">{{ bus.bus_name }}</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Express Service</div>
+                        </div>
                     </div>
                     {% if bus.available_seats > 0 %}
-                        <span class="badge badge-success">Available</span>
+                        <div style="padding: 6px 14px; background: #dcfce7; color: #166534; border-radius: 99px; font-size: 0.7rem; font-weight: 800;">AVAILABLE</div>
                     {% else %}
-                        <span class="badge badge-danger">Sold Out</span>
+                        <div style="padding: 6px 14px; background: #fee2e2; color: #991b1b; border-radius: 99px; font-size: 0.7rem; font-weight: 800;">SOLD OUT</div>
                     {% endif %}
                 </div>
                 
-                <div style="padding: 32px;">
-                    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 28px;">
-                        <div style="text-align: center; flex: 1;">
-                            <div style="font-size: 1.1rem; font-weight: 800;">{{ bus.source }}</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Departure</div>
+                <div style="padding: 28px;">
+                    <!-- Route -->
+                    <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 1.15rem; font-weight: 900; color: var(--text);">{{ bus.source }}</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 2px;">Departure</div>
                         </div>
-                        <div style="flex: 0 0 40px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                            <div style="height: 2px; width: 40px; background: var(--line); position: relative;">
-                                <i class="fas fa-chevron-right" style="position: absolute; right: -4px; top: -6px; color: var(--primary); font-size: 0.8rem;"></i>
-                            </div>
+                        <div style="padding-top: 12px; opacity: 0.3;">
+                            <i class="fas fa-arrow-right"></i>
                         </div>
-                        <div style="text-align: center; flex: 1;">
-                            <div style="font-size: 1.1rem; font-weight: 800;">{{ bus.destination }}</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Arrival</div>
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;">
-                        <div style="padding: 16px; background: var(--bg); border-radius: var(--radius-md); border: 1px solid var(--line); text-align: center;">
-                            <div style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Departure Time</div>
-                            <div style="font-size: 0.95rem; font-weight: 800;">{{ bus.departure_time|date:"H:i" }}</div>
-                            <div style="font-size: 0.7rem; color: var(--text-muted);">{{ bus.departure_time|date:"M d" }}</div>
-                        </div>
-                        <div style="padding: 16px; background: var(--bg); border-radius: var(--radius-md); border: 1px solid var(--line); text-align: center;">
-                            <div style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Ticket Price</div>
-                            <div style="font-size: 1.1rem; font-weight: 900; color: var(--success);">${{ bus.price }}</div>
+                        <div style="flex: 1; text-align: right;">
+                            <div style="font-size: 1.15rem; font-weight: 900; color: var(--text);">{{ bus.destination }}</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 2px;">Arrival</div>
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding: 0 4px;">
+                    <!-- Details Row -->
+                    <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+                        <div style="flex: 1; padding: 14px; background: #f8fafc; border-radius: 20px; border: 1px solid #f1f5f9;">
+                            <div style="font-size: 0.6rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Time</div>
+                            <div style="font-size: 0.9rem; font-weight: 800;">{{ bus.departure_time|date:"H:i" }}</div>
+                        </div>
+                        <div style="flex: 1; padding: 14px; background: #f8fafc; border-radius: 20px; border: 1px solid #f1f5f9;">
+                            <div style="font-size: 0.6rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Fare</div>
+                            <div style="font-size: 0.95rem; font-weight: 900; color: #10b981;">${{ bus.price }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Seats Info -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <i class="fas fa-couch" style="color: var(--text-muted);"></i>
-                            <span style="font-weight: 700; font-size: 0.9rem;">{{ bus.available_seats }} Seats Left</span>
+                            <i class="fas fa-couch" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+                            <span style="font-size: 0.85rem; font-weight: 700;">{{ bus.available_seats }} Seats Left</span>
                         </div>
-                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Total: {{ bus.total_seats }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">of {{ bus.total_seats }} total</div>
                     </div>
 
+                    <!-- Action -->
                     {% if bus.available_seats > 0 %}
                         {% if user.is_authenticated %}
-                            <a href="{% url 'book_bus' bus.id %}" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px;">
-                                Select Seats <i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i>
+                            <a href="{% url 'book_bus' bus.id %}" class="btn btn-primary" style="width: 100%; justify-content: center; height: 52px; border-radius: 16px;">
+                                Book Now <i class="fas fa-ticket" style="font-size: 0.8rem; margin-left: 8px;"></i>
                             </a>
                         {% else %}
-                            <a href="{% url 'login' %}?next={% url 'book_bus' bus.id %}" class="btn btn-outline" style="width: 100%; justify-content: center; padding: 16px; border-color: var(--primary); color: var(--primary);">
-                                Login to Book <i class="fas fa-sign-in-alt" style="font-size: 0.8rem; margin-left: 8px;"></i>
+                            <a href="{% url 'login' %}?next={% url 'book_bus' bus.id %}" class="btn btn-outline" style="width: 100%; justify-content: center; height: 52px; border-radius: 16px; border-color: var(--primary); color: var(--primary); border-width: 1px;">
+                                Login to Book <i class="fas fa-lock" style="font-size: 0.75rem; margin-left: 8px;"></i>
                             </a>
                         {% endif %}
                     {% else %}
-                        <button class="btn btn-secondary" style="width: 100%; justify-content: center; padding: 16px; cursor: not-allowed; color: var(--text-muted);" disabled>
+                        <button class="btn btn-secondary" style="width: 100%; justify-content: center; height: 52px; border-radius: 16px; cursor: not-allowed;" disabled>
                             Fully Booked
                         </button>
                     {% endif %}
                 </div>
             </article>
         {% empty %}
-            <div class="card" style="grid-column: 1/-1; text-align: center; padding: 100px 40px;">
-                <div class="empty-state">
-                    <i class="fas fa-bus-slash" style="font-size: 4rem; margin-bottom: 24px; color: var(--line);"></i>
-                    <h3>No Services Found</h3>
-                    <p>We couldn't find any buses for the selected route. Try searching for different cities.</p>
-                    <a href="{% url 'search_buses' %}" class="btn btn-outline" style="margin-top: 24px;">View All Routes</a>
+            <div style="grid-column: 1/-1; text-align: center; padding: 100px 40px; background: #fff; border-radius: 32px; border: 2px dashed #f1f5f9;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: #f1f5f9; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+                    <i class="fas fa-bus-slash" style="font-size: 2rem; color: #cbd5e1;"></i>
                 </div>
+                <h3 style="font-size: 1.5rem; margin-bottom: 8px;">No Routes Found</h3>
+                <p class="muted-text">We couldn't find any services for your search. Please try different cities.</p>
+                <a href="{% url 'search_buses' %}" class="btn btn-primary" style="margin-top: 24px; padding: 0 40px;">Show All Routes</a>
             </div>
         {% endfor %}
     </div>
