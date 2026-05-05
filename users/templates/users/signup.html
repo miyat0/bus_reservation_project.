@@ -1,48 +1,71 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 200px);">
-    <div class="glass-card" style="max-width: 500px; width: 100%; padding: 48px; position: relative;">
-        <!-- Brand Accent -->
-        <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; background: var(--primary); border-radius: 18px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg);">
-            <i class="fas fa-user-plus" style="color: #fff; font-size: 1.5rem;"></i>
-        </div>
-
-        <div style="text-align: center; margin-top: 20px; margin-bottom: 32px;">
-            <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px;">Create Account</h1>
-            <p style="color: var(--text-muted); font-weight: 600;">Join thousands of happy travelers.</p>
+<div style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 200px); padding: 40px 20px;">
+    <div class="card" style="max-width: 480px; width: 100%; padding: 56px; position: relative; border-radius: var(--radius-lg); box-shadow: 0 40px 80px rgba(0,0,0,0.08);">
+        
+        <!-- Brand Identity -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <div style="width: 72px; height: 72px; background: var(--primary); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);">
+                <i class="fas fa-user-plus" style="color: #fff; font-size: 2rem;"></i>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 8px; color: var(--text);">Create Account</h1>
+            <p class="muted-text">Join thousands of happy travelers and start your premium journey today.</p>
         </div>
 
         {% if form.errors %}
-            <div style="background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(239, 68, 68, 0.2);">
+            <div style="background: #fee2e2; color: #991b1b; padding: 16px; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 700; margin-bottom: 32px; border: 1px solid rgba(239, 68, 68, 0.15);">
                 {% for field in form %}
                     {% for error in field.errors %}
-                        <div>{{ field.label }}: {{ error }}</div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                            <i class="fas fa-circle-exclamation" style="font-size: 0.8rem;"></i>
+                            <span>{{ field.label }}: {{ error }}</span>
+                        </div>
                     {% endfor %}
                 {% endfor %}
                 {% for error in form.non_field_errors %}
-                    <div>{{ error }}</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-circle-exclamation" style="font-size: 0.8rem;"></i>
+                        <span>{{ error }}</span>
+                    </div>
                 {% endfor %}
             </div>
         {% endif %}
 
-        <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+        <form method="post" autocomplete="off">
             {% csrf_token %}
             
-            {% for field in form %}
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-left: 4px;">{{ field.label }}</label>
-                    <div style="position: relative;">
-                        <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.name }}" required placeholder="{{ field.label }}" style="width: 100%; padding: 14px 14px; border-radius: 12px; border: 1px solid var(--line); background: #fff; font-weight: 600; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--line)'">
-                    </div>
+            <div class="form-group">
+                <label class="label">Username</label>
+                <div style="position: relative;">
+                    <i class="fas fa-user" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1rem;"></i>
+                    <input type="text" name="username" value="{{ form.username.value|default:'' }}" required placeholder="Pick a unique username" class="input" style="padding-left: 48px; height: 56px;">
                 </div>
-            {% endfor %}
+            </div>
 
-            <button type="submit" class="primary-button" style="width: 100%; padding: 16px; font-size: 1rem; margin-top: 12px;">Create My Account</button>
+            <div class="form-group">
+                <label class="label">Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-lock" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1rem;"></i>
+                    <input type="password" name="password1" required placeholder="Create a strong password" class="input" style="padding-left: 48px; height: 56px;">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 32px;">
+                <label class="label">Confirm Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-shield-check" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1rem;"></i>
+                    <input type="password" name="password2" required placeholder="Repeat your password" class="input" style="padding-left: 48px; height: 56px;">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; height: 56px; font-size: 1.1rem;">
+                Create My Account
+            </button>
             
-            <div style="text-align: center; margin-top: 16px; font-size: 0.9rem; font-weight: 600;">
-                <span style="color: var(--text-muted);">Already a member?</span>
-                <a href="{% url 'login' %}" style="color: var(--primary); margin-left: 4px;">Sign in instead</a>
+            <div style="text-align: center; margin-top: 32px; font-size: 0.95rem; font-weight: 600;">
+                <span style="color: var(--text-muted);">Already have an account?</span>
+                <a href="{% url 'login' %}" style="color: var(--primary); margin-left: 6px; font-weight: 800; text-decoration: none;">Sign in instead</a>
             </div>
         </form>
     </div>
