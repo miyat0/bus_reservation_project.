@@ -38,7 +38,6 @@ def my_bookings(request):
     bookings = Booking.objects.filter(user=request.user).select_related('bus').order_by('-booking_date')
     return render(request, 'users/my_bookings.html', {'bookings': bookings})
 
-@login_required
 def search_buses(request):
     buses = Bus.objects.all()
     source = request.GET.get('source')
