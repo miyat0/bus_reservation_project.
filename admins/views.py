@@ -9,23 +9,20 @@ from staff.models import Staff
 from django import forms
 
 # Forms for Admin management
-CITY_CHOICES = [
-    ('', 'Select City'),
-    ('Kochi', 'Kochi'),
-    ('Trivandrum', 'Trivandrum'),
-    ('Kozhikode', 'Kozhikode'),
-    ('Chennai', 'Chennai'),
-    ('Coimbatore', 'Coimbatore'),
-    ('Madurai', 'Madurai'),
-    ('Bangalore', 'Bangalore'),
-    ('Mysore', 'Mysore'),
-    ('Mangalore', 'Mangalore'),
-    ('Hyderabad', 'Hyderabad'),
-]
-
 class BusForm(forms.ModelForm):
-    source = forms.ChoiceField(choices=CITY_CHOICES, widget=forms.Select(attrs={'class': 'input'}))
-    destination = forms.ChoiceField(choices=CITY_CHOICES, widget=forms.Select(attrs={'class': 'input'}))
+    source = forms.ChoiceField(widget=forms.Select(attrs={'class': 'input'}))
+    destination = forms.ChoiceField(widget=forms.Select(attrs={'class': 'input'}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Fetch unique cities currently in the database
+        sources = Bus.objects.values_list('source', flat=True).distinct()
+        destinations = Bus.objects.values_list('destination', flat=True).distinct()
+        city_list = sorted(list(set(list(sources) + list(destinations))))
+        
+        choices = [('', 'Select City')] + [(city, city) for city in city_list]
+        self.fields['source'].choices = choices
+        self.fields['destination'].choices = choices
 
     class Meta:
         model = Bus

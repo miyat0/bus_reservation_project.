@@ -39,7 +39,11 @@ def my_bookings(request):
     return render(request, 'users/my_bookings.html', {'bookings': bookings})
 
 def search_buses(request):
-    cities = ['Kochi', 'Trivandrum', 'Kozhikode', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Mysore', 'Mangalore', 'Hyderabad']
+    # Dynamically fetch unique cities from existing fleet data
+    sources = Bus.objects.values_list('source', flat=True).distinct()
+    destinations = Bus.objects.values_list('destination', flat=True).distinct()
+    cities = sorted(list(set(list(sources) + list(destinations))))
+    
     buses = Bus.objects.all().order_by('departure_time')
     source = request.GET.get('source')
     destination = request.GET.get('destination')
