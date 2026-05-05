@@ -283,7 +283,6 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                flex-direction: row-reverse; /* Hamburger Left, Logo Right */
                 background: #fff;
                 padding: 16px 20px;
                 position: sticky;
@@ -296,7 +295,7 @@
         /* Global Nav (Public) */
         .global-nav {
             background: #fff;
-            height: 72px;
+            height: 80px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -305,9 +304,8 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-            border-bottom: 1px solid var(--line);
         }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: -0.02em; flex-shrink: 0; }
+        .logo { font-size: 1.6rem; font-weight: 800; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 12px; letter-spacing: -0.02em; }
         .logo-icon { 
             width: 38px; 
             height: 38px; 
@@ -371,7 +369,6 @@
         {% endif %}
 
         {% if not user.is_authenticated or request.resolver_match.url_name == 'home' %}
-            <!-- Public Top Navigation (Always Full Width) -->
             <nav class="global-nav">
                 <a href="{% url 'home' %}" class="logo">
                     <div class="logo-icon"><i class="fas fa-bolt"></i></div>
@@ -400,7 +397,7 @@
         <div class="{% if user.is_authenticated and request.resolver_match.url_name != 'home' %}main-content{% else %}full-width{% endif %}">
             
             {% if user.is_authenticated and request.resolver_match.url_name != 'home' %}
-                <!-- Mobile Header (Only for Portals) -->
+                <!-- Mobile Header -->
                 <div class="mobile-header">
                     <a href="{% url 'home' %}" class="logo">
                         <i class="fas fa-bolt"></i> Quickgo
@@ -412,10 +409,7 @@
 
                 <!-- Internal Portal Header -->
                 <header class="portal-header">
-                    <div style="display: flex; align-items: center; gap: 20px;">
-                        <button id="mainSidebarToggle" class="btn btn-outline" style="padding: 10px; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #fff;">
-                            <i class="fas fa-bars"></i>
-                        </button>
+                    <div>
                         {% block header_extra %}{% endblock %}
                     </div>
                     <div class="profile-wrapper">
@@ -457,6 +451,7 @@
                         </div>
                     </div>
                 </header>
+            {% elif request.resolver_match.url_name == 'home' or not user.is_authenticated %}
             {% endif %}
 
             <div id="toastContainer" class="toast-container"></div>
