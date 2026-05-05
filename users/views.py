@@ -39,7 +39,8 @@ def my_bookings(request):
     return render(request, 'users/my_bookings.html', {'bookings': bookings})
 
 def search_buses(request):
-    buses = Bus.objects.all()
+    # Only show future or current trips
+    buses = Bus.objects.filter(departure_time__gte=timezone.now()).order_by('departure_time')
     source = request.GET.get('source')
     destination = request.GET.get('destination')
     travel_date = request.GET.get('travel_date')
@@ -53,9 +54,17 @@ def search_buses(request):
         
     return render(request, 'users/search_buses.html', {'buses': buses})
 
+from django.utils import timezone
+
 @login_required
 def book_bus(request, bus_id):
     bus = get_object_or_404(Bus, id=bus_id)
+    
+    # Date Validation: Prevent booking past trips
+    if bus.departure_time < timezone.now():
+        messages.error(request, 'This journey has already departed. Please choose a future trip.')
+        return redirect('search_buses')
+
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
