@@ -4,12 +4,11 @@
 <style>
     .hero-section {
         position: relative;
-        padding: 80px 0 160px;
+        padding: 80px 0 60px;
         background: radial-gradient(circle at top right, #fff5f5 0%, transparent 40%),
                     radial-gradient(circle at bottom left, #fff1f1 0%, transparent 40%);
-        border-radius: var(--radius-lg);
-        margin-bottom: 80px;
-        overflow: hidden;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        margin-bottom: 0;
     }
     
     .hero-content {
@@ -54,21 +53,23 @@
         line-height: 1.6;
     }
 
+    .search-wrapper {
+        background: #fff;
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        padding: 0 32px 32px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+        margin-bottom: 80px;
+    }
+
     .search-panel {
-        position: absolute;
-        bottom: -40px;
-        left: 50%;
-        transform: translateX(-50%);
         width: 100%;
-        max-width: 1100px;
         background: #fff;
         padding: 12px;
-        border-radius: 32px;
-        box-shadow: 0 40px 100px rgba(0,0,0,0.12);
+        border-radius: 24px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.10);
         display: flex;
         gap: 8px;
         border: 1px solid var(--line);
-        z-index: 10;
     }
 
     .search-group {
@@ -180,8 +181,8 @@
 
     @media (max-width: 1024px) {
         .hero-title { font-size: 3rem; }
-        .search-panel { flex-direction: column; bottom: -200px; padding: 24px; }
-        .hero-section { margin-bottom: 240px; }
+        .search-panel { flex-direction: column; padding: 16px; }
+        .search-wrapper { padding: 0 16px 24px; }
         .features-grid { grid-template-columns: 1fr; }
     }
 </style>
@@ -198,7 +199,9 @@
             security, and reliability on every mile of your journey.
         </p>
     </div>
+</div>
 
+<div class="search-wrapper">
     <div class="search-panel">
         <form action="{% url 'search_buses' %}" method="get" style="display: contents;">
             <div class="search-group">
