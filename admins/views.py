@@ -14,6 +14,23 @@ class BusForm(forms.ModelForm):
         model = Bus
         fields = '__all__'
 
+    def clean_bus_name(self):
+        bus_name = self.cleaned_data.get('bus_name')
+        # Check for duplicate names, excluding the current instance when editing
+        if Bus.objects.filter(bus_name=bus_name).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("A fleet with this name already exists. Please use a unique name.")
+        return bus_name
+
+    def clean(self):
+        cleaned_data = super().clean()
+        total = cleaned_data.get('total_seats')
+        available = cleaned_data.get('available_seats')
+
+        if total is not None and available is not None:
+            if available > total:
+                self.add_error('available_seats', "Available seats cannot exceed the total seat capacity.")
+        return cleaned_data
+
 class StaffAssignmentForm(forms.ModelForm):
     class Meta:
         model = Staff
