@@ -174,24 +174,15 @@
                             <label>Origin</label>
                             <div class="custom-input-wrapper">
                                 <i class="fas fa-location-dot"></i>
-                                <select name="source" required>
-                                    <option value="" disabled selected>Select Departure City</option>
-                                    {% for city in cities %}
-                                        <option value="{{ city }}">{{ city }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="text" name="source" required placeholder="Select Departure City">
                             </div>
                         </div>
                         <div class="input-group">
                             <label>Destination</label>
                             <div class="custom-input-wrapper">
                                 <i class="fas fa-map-pin"></i>
-                                <select name="destination" required>
-                                    <option value="" disabled selected>Select Arrival City</option>
-                                    {% for city in cities %}
-                                        <option value="{{ city }}">{{ city }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="text" name="destination" required placeholder="Select Arrival City">
+
                             </div>
                         </div>
                     </div>

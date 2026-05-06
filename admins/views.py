@@ -10,8 +10,8 @@ from django import forms
 
 # Forms for Admin management
 class BusForm(forms.ModelForm):
-    source = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'list': 'city-list', 'placeholder': 'Starting point'}))
-    destination = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'list': 'city-list', 'placeholder': 'Final stop'}))
+    source = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Starting point', 'style': 'padding-left: 44px;'}))
+    destination = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Final stop', 'style': 'padding-left: 44px;'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
