@@ -10,19 +10,15 @@ from django import forms
 
 # Forms for Admin management
 class BusForm(forms.ModelForm):
-    source = forms.ChoiceField(widget=forms.Select(attrs={'class': 'input'}))
-    destination = forms.ChoiceField(widget=forms.Select(attrs={'class': 'input'}))
+    source = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'list': 'city-list', 'placeholder': 'Starting point'}))
+    destination = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'list': 'city-list', 'placeholder': 'Final stop'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Fetch unique cities currently in the database
+        # Fetch unique cities for suggestions
         sources = Bus.objects.values_list('source', flat=True).distinct()
         destinations = Bus.objects.values_list('destination', flat=True).distinct()
-        city_list = sorted(list(set(list(sources) + list(destinations))))
-        
-        choices = [('', 'Select City')] + [(city, city) for city in city_list]
-        self.fields['source'].choices = choices
-        self.fields['destination'].choices = choices
+        self.cities = sorted(list(set(list(sources) + list(destinations))))
 
     class Meta:
         model = Bus

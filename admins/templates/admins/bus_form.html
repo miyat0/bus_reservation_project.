@@ -42,7 +42,7 @@
                     <label class="label">Origin City</label>
                     <div style="position: relative;">
                         <i class="fas fa-location-dot" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
-                        <input type="text" name="source" value="{{ form.source.value|default:'' }}" class="input" style="padding-left: 44px;" required placeholder="Starting point">
+                        {{ form.source }}
                     </div>
                 </div>
                 
@@ -50,9 +50,15 @@
                     <label class="label">Destination City</label>
                     <div style="position: relative;">
                         <i class="fas fa-map-pin" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
-                        <input type="text" name="destination" value="{{ form.destination.value|default:'' }}" class="input" style="padding-left: 44px;" required placeholder="Final stop">
+                        {{ form.destination }}
                     </div>
                 </div>
+
+                <datalist id="city-list">
+                    {% for city in form.cities %}
+                        <option value="{{ city }}">
+                    {% endfor %}
+                </datalist>
 
                 <div class="form-group">
                     <label class="label">Total Capacity</label>
