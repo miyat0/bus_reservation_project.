@@ -97,8 +97,8 @@
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 
         /* Tables */
-        .table-container { background: var(--card-bg); border-radius: var(--radius-lg); border: 1px solid var(--line); overflow: hidden; box-shadow: var(--shadow); }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
+        .table-container { background: var(--card-bg); border-radius: var(--radius-lg); border: 1px solid var(--line); overflow-x: auto; box-shadow: var(--shadow); }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
         th { padding: 20px 32px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; background: #fafafa; border-bottom: 1px solid var(--line); }
         td { padding: 24px 32px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
         tr:last-child td { border-bottom: none; }
@@ -289,6 +289,34 @@
                 top: 0;
                 z-index: 999;
                 border-bottom: 1px solid var(--line);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card { padding: 20px !important; }
+            .main-content { padding: 16px 12px !important; }
+            .global-nav { padding: 16px !important; height: auto !important; flex-direction: column; gap: 16px; align-items: center; }
+            .global-nav > div { width: 100%; justify-content: center; flex-direction: column; align-items: center; gap: 16px !important; }
+            .nav-links { gap: 16px !important; justify-content: center; width: 100%; flex-wrap: wrap; }
+            .auth-nav { justify-content: center; width: 100%; }
+            
+            /* Target inline grid layouts and force single column */
+            div[style*="display: grid"],
+            div[style*="display:grid"] {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            /* Target inline span columns */
+            div[style*="grid-column: span 2"],
+            div[style*="grid-column:span 2"],
+            div[style*="grid-column: span 3"],
+            div[style*="grid-column:span 3"] {
+                grid-column: span 1 !important;
+            }
+            /* Override 1fr 1fr grids on forms/buttons */
+            div[style*="grid-template-columns: 1fr 1fr"],
+            div[style*="grid-template-columns:1fr 1fr"] {
+                grid-template-columns: 1fr !important;
             }
         }
 
