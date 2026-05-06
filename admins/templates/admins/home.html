@@ -16,22 +16,22 @@
         overflow: hidden;
     }
     .hero-grid {
-        display: flex;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 60px;
         align-items: center;
         width: 100%;
         z-index: 10;
         position: relative;
     }
     .search-card {
-        background: rgba(255, 255, 255, 0.95);
+        background: #fff;
         padding: 48px;
         border-radius: 32px;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-        max-width: 600px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.06);
+        max-width: 540px;
         width: 100%;
         z-index: 2;
-        backdrop-filter: blur(10px);
     }
     .search-card h1 {
         font-size: 3rem;
@@ -120,22 +120,19 @@
         background: #f04428;
     }
     .bus-visual-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        position: relative;
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
         z-index: 1;
-        opacity: 0.15;
-        pointer-events: none;
     }
     .hero-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        width: 120%;
+        max-width: 800px;
+        height: auto;
+        transform: perspective(1000px) rotateY(-5deg);
+        filter: drop-shadow(0 40px 100px rgba(0,0,0,0.15));
+        border-radius: 40px;
     }
     .floating-icon {
         position: absolute;
@@ -169,109 +166,113 @@
     }
 </style>
 
-<div class="hero-container">
-    <div class="hero-grid">
-        <div class="search-section">
-            <div class="search-card">
-                <h1>Book Your Bus Journey Instantly</h1>
-                <p>Find the best routes, fares, and comfort for your travel.</p>
-                
-                <form action="{% url 'search_buses' %}" method="GET">
-                    <div class="input-grid">
-                        <div class="input-group">
-                            <label>Origin</label>
-                            <div class="custom-input-wrapper">
-                                <i class="fas fa-location-dot"></i>
-                                <input type="text" name="source" required placeholder="Select Departure City">
+<!-- Wraps the whole page to make it look like a single continuous tube -->
+<div style="background: linear-gradient(180deg, #f8faff 0%, #ffffff 40%, #f8faff 100%);">
+    <div class="hero-container" style="background: transparent;">
+        <div class="hero-grid">
+            <div class="search-section">
+                <div class="search-card">
+                    <h1>Book Your Bus Journey Instantly</h1>
+                    <p>Find the best routes, fares, and comfort for your travel.</p>
+                    
+                    <form action="{% url 'search_buses' %}" method="GET">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label>Origin</label>
+                                <div class="custom-input-wrapper">
+                                    <i class="fas fa-location-dot"></i>
+                                    <input type="text" name="source" required placeholder="Select Departure City">
+                                </div>
                             </div>
-                        </div>
-                        <div class="input-group">
-                            <label>Destination</label>
-                            <div class="custom-input-wrapper">
-                                <i class="fas fa-map-pin"></i>
-                                <input type="text" name="destination" required placeholder="Select Arrival City">
+                            <div class="input-group">
+                                <label>Destination</label>
+                                <div class="custom-input-wrapper">
+                                    <i class="fas fa-map-pin"></i>
+                                    <input type="text" name="destination" required placeholder="Select Arrival City">
 
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="input-grid">
-                        <div class="input-group">
-                            <label>Travel Date</label>
-                            <div class="custom-input-wrapper">
-                                <i class="fas fa-calendar-alt"></i>
-                                <input type="date" name="travel_date" required min="{{ today_date }}">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label>Travel Date</label>
+                                <div class="custom-input-wrapper">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <input type="date" name="travel_date" required min="{{ today_date }}">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Passengers</label>
+                                <div class="custom-input-wrapper">
+                                    <i class="fas fa-user-group"></i>
+                                    <select name="passengers">
+                                        <option value="1">1 Passenger</option>
+                                        <option value="2">2 Passengers</option>
+                                        <option value="3">3 Passengers</option>
+                                        <option value="4">4 Passengers</option>
+                                        <option value="5">5 Passengers</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-group">
-                            <label>Passengers</label>
-                            <div class="custom-input-wrapper">
-                                <i class="fas fa-user-group"></i>
-                                <select name="passengers">
-                                    <option value="1">1 Passenger</option>
-                                    <option value="2">2 Passengers</option>
-                                    <option value="3">3 Passengers</option>
-                                    <option value="4">4 Passengers</option>
-                                    <option value="5">5 Passengers</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
-                    <button type="submit" class="search-btn">
-                        <i class="fas fa-search"></i>
-                        SEARCH BUSES
-                    </button>
-                </form>
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                            SEARCH BUSES
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <div class="bus-visual-wrapper">
-            <div class="floating-icon icon-1"><i class="fas fa-location-dot"></i></div>
-            <div class="floating-icon icon-2"><i class="fas fa-clock"></i></div>
-            <div class="floating-icon icon-3"><i class="fas fa-ticket"></i></div>
-            <div class="floating-icon icon-4"><i class="fas fa-chair"></i></div>
-            <img src="{% static 'images/hero_bus.png' %}" alt="Travel Bus" class="hero-image">
+            <div class="bus-visual-wrapper">
+                <div class="floating-icon icon-1"><i class="fas fa-location-dot"></i></div>
+                <div class="floating-icon icon-2"><i class="fas fa-clock"></i></div>
+                <div class="floating-icon icon-3"><i class="fas fa-ticket"></i></div>
+                <div class="floating-icon icon-4"><i class="fas fa-chair"></i></div>
+                <img src="{% static 'images/hero_bus.png' %}" alt="Travel Bus" class="hero-image">
+            </div>
         </div>
     </div>
-</div>
 
-<div style="padding: 100px 8%; background: #fff;">
-    <div style="text-align: center; margin-bottom: 60px;">
-        <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Why choose Quickgo?</h2>
-        <p class="muted-text">Experience the difference with our premium bus services</p>
+    <div style="padding: 100px 8%; background: transparent;">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 16px;">Why choose Quickgo?</h2>
+            <p class="muted-text">Experience the difference with our premium bus services</p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+            <div class="card" style="text-align: center; border: none; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+                <div style="width: 80px; height: 80px; background: #f8faff; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--primary-orange); font-size: 2rem;">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h3>Safe Travel</h3>
+                <p class="muted-text">Verified fleet and experienced drivers for your safety.</p>
+            </div>
+            <div class="card" style="text-align: center; border: none; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+                <div style="width: 80px; height: 80px; background: #f8faff; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--primary-orange); font-size: 2rem;">
+                    <i class="fas fa-tag"></i>
+                </div>
+                <h3>Best Prices</h3>
+                <p class="muted-text">Affordable fares without compromising on comfort.</p>
+            </div>
+            <div class="card" style="text-align: center; border: none; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+                <div style="width: 80px; height: 80px; background: #f8faff; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--primary-orange); font-size: 2rem;">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <h3>Modern Amenities</h3>
+                <p class="muted-text">Free Wi-Fi, charging ports, and reclinable seats.</p>
+            </div>
+        </div>
     </div>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
-        <div class="card" style="text-align: center; border: none; background: #f8faff;">
-            <div style="width: 80px; height: 80px; background: #fff; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); color: var(--primary-orange); font-size: 2rem;">
-                <i class="fas fa-shield-halved"></i>
-            </div>
-            <h3>Safe Travel</h3>
-            <p class="muted-text">Verified fleet and experienced drivers for your safety.</p>
-        </div>
-        <div class="card" style="text-align: center; border: none; background: #f8faff;">
-            <div style="width: 80px; height: 80px; background: #fff; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); color: var(--primary-orange); font-size: 2rem;">
-                <i class="fas fa-tag"></i>
-            </div>
-            <h3>Best Prices</h3>
-            <p class="muted-text">Affordable fares without compromising on comfort.</p>
-        </div>
-        <div class="card" style="text-align: center; border: none; background: #f8faff;">
-            <div style="width: 80px; height: 80px; background: #fff; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); color: var(--primary-orange); font-size: 2rem;">
-                <i class="fas fa-wifi"></i>
-            </div>
-            <h3>Modern Amenities</h3>
-            <p class="muted-text">Free Wi-Fi, charging ports, and reclinable seats.</p>
-        </div>
-</div>
 
-<div id="support-section" style="padding: 80px 8%; background: #f8faff; border-top: 1px solid var(--line);">
-    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-        <h2 style="font-size: 2rem; margin-bottom: 24px; color: var(--text);">Need Assistance?</h2>
-        <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; font-weight: 500;">
-            Our dedicated support team is available 24/7 to help you with your journey. Whether you need to modify your booking, inquire about fleet amenities, or report an issue, we're here for you. Reach out to us at <b>support@quickgo.com</b> or call our helpline at <b>1-800-QUICKGO</b>.
-        </p>
+    <div id="support-section" style="padding: 80px 8%; background: transparent; border-top: 1px solid rgba(0,0,0,0.05);">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2 style="font-size: 2rem; margin-bottom: 24px; color: var(--text);">Need Assistance?</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; font-weight: 500;">
+                Our dedicated support team is available 24/7 to help you with your journey. Whether you need to modify your booking, inquire about fleet amenities, or report an issue, we're here for you. Reach out to us at <b>support@quickgo.com</b> or call our helpline at <b>1-800-QUICKGO</b>.
+            </p>
+        </div>
     </div>
 </div>
 {% endblock %}
