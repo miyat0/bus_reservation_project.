@@ -124,7 +124,7 @@
         }
     },
     {
-        "model": "users.booking",
+        "model": "accounts.booking",
         "pk": 2,
         "fields": {
             "user": 3,
@@ -140,7 +140,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 1,
         "fields": {
             "bus_name": "KSRTC",
@@ -154,7 +154,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 6,
         "fields": {
             "bus_name": "Tamil Nadu Voyager 224",
@@ -168,7 +168,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 7,
         "fields": {
             "bus_name": "Deccan Queen 234",
@@ -182,7 +182,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 8,
         "fields": {
             "bus_name": "Karnataka Shuttle 720",
@@ -196,7 +196,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 9,
         "fields": {
             "bus_name": "Night Crawler 408",
@@ -210,7 +210,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 10,
         "fields": {
             "bus_name": "Highland Flyer 995",
@@ -224,7 +224,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 11,
         "fields": {
             "bus_name": "Tamil Nadu Voyager 943",
@@ -238,7 +238,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 12,
         "fields": {
             "bus_name": "Deccan Queen 845",
@@ -252,7 +252,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 13,
         "fields": {
             "bus_name": "Kerala Express 476",
@@ -266,7 +266,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 14,
         "fields": {
             "bus_name": "Swift Silver 889",
@@ -280,7 +280,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 15,
         "fields": {
             "bus_name": "Heritage Transit 694",
@@ -294,7 +294,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 16,
         "fields": {
             "bus_name": "Karnataka Shuttle 387",
@@ -308,7 +308,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 17,
         "fields": {
             "bus_name": "Heritage Transit 171",
@@ -322,7 +322,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 18,
         "fields": {
             "bus_name": "Coastal Rider 839",
@@ -336,7 +336,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 19,
         "fields": {
             "bus_name": "Telangana Link 580",
@@ -350,7 +350,7 @@
         }
     },
     {
-        "model": "admins.bus",
+        "model": "buses.bus",
         "pk": 20,
         "fields": {
             "bus_name": "Metro Connect 414",
