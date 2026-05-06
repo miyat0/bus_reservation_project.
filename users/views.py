@@ -42,7 +42,12 @@ def search_buses(request):
     # Dynamically fetch unique cities from existing fleet data
     sources = Bus.objects.values_list('source', flat=True).distinct()
     destinations = Bus.objects.values_list('destination', flat=True).distinct()
-    cities = sorted(list(set(list(sources) + list(destinations))))
+    
+    # Standard Indian cities as fallback
+    default_cities = ['Kochi', 'Trivandrum', 'Kozhikode', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Mysore', 'Mangalore', 'Hyderabad']
+    
+    db_cities = list(set(list(sources) + list(destinations)))
+    cities = sorted(list(set(db_cities + default_cities))) if not db_cities else sorted(db_cities)
     
     buses = Bus.objects.all().order_by('departure_time')
     source = request.GET.get('source')
