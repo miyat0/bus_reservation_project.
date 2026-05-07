@@ -132,7 +132,7 @@ def cancel_booking(request, booking_id):
             booking.save()
             
             bus = booking.bus
-            bus.available_seats += 1
+            bus.available_seats += booking.number_of_seats
             bus.save()
             messages.success(request, 'Booking cancelled successfully.')
         return redirect('user_dashboard')

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponseForbidden
+from django.core.exceptions import ObjectDoesNotExist
 from .models import Staff
 from users.models import Booking
 
@@ -9,7 +10,7 @@ from users.models import Booking
 def dashboard(request):
     try:
         staff = request.user.staff
-    except Staff.DoesNotExist:
+    except ObjectDoesNotExist:
         return redirect('home')
     
     assigned_bus = staff.assigned_bus
@@ -28,14 +29,14 @@ def dashboard(request):
 def staff_schedule(request):
     try:
         staff = request.user.staff
-    except Staff.DoesNotExist: return redirect('home')
+    except ObjectDoesNotExist: return redirect('home')
     return render(request, 'staff/schedule.html', {'staff': staff})
 
 @login_required
 def staff_availability(request):
     try:
         staff = request.user.staff
-    except Staff.DoesNotExist: return redirect('home')
+    except ObjectDoesNotExist: return redirect('home')
     if request.method == 'POST':
         staff.is_available = not staff.is_available
         staff.save()
@@ -50,7 +51,7 @@ def toggle_availability(request):
         staff = request.user.staff
         staff.is_available = not staff.is_available
         staff.save()
-    except Staff.DoesNotExist: pass
+    except ObjectDoesNotExist: pass
     return redirect('staff_dashboard')
 
 @login_required
