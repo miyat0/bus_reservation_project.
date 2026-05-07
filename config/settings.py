@@ -74,6 +74,7 @@ if db_engine == 'django.db.backends.sqlite3':
         }
     }
 else:
+    db_ssl = os.environ.get('DB_SSL', 'False').lower() in ('true', '1', 'yes')
     DATABASES = {
         'default': {
             'ENGINE': db_engine,
@@ -82,6 +83,9 @@ else:
             'PASSWORD': os.environ.get('DB_PASSWORD', ''),
             'HOST': os.environ.get('DB_HOST', 'localhost'),
             'PORT': os.environ.get('DB_PORT', '3306'),
+            'OPTIONS': {
+                'ssl': {'ca': os.environ.get('DB_SSL_CA', '/etc/ssl/certs/ca-certificates.crt')}
+            } if db_ssl else {}
         }
     }
 
