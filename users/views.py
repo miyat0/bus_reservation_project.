@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseForbidden
+from django.utils import timezone
 
 from .models import Booking
 from admins.models import Bus
@@ -71,7 +72,6 @@ def search_buses(request):
         'cities': cities
     })
 
-from django.utils import timezone
 
 @login_required
 def book_bus(request, bus_id):
