@@ -12,7 +12,26 @@
         <form method="get" action="{% url 'search_buses' %}" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
             <div style="flex: 1; min-width: 200px; position: relative;">
                 <i class="fas fa-location-dot" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
-                <input type="text" name="source" value="{{ request.GET.source }}" placeholder="From City" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa;">
+                <select name="source" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; -webkit-appearance: none; appearance: none; cursor: pointer;">
+                    <option value="" {% if not request.GET.source %}selected{% endif %}>From City (All)</option>
+                    <option value="Alappuzha" {% if request.GET.source == 'Alappuzha' %}selected{% endif %}>Alappuzha</option>
+                    <option value="Ernakulam / Kochi" {% if request.GET.source == 'Ernakulam / Kochi' %}selected{% endif %}>Ernakulam / Kochi</option>
+                    <option value="Idukki" {% if request.GET.source == 'Idukki' %}selected{% endif %}>Idukki</option>
+                    <option value="Kannur" {% if request.GET.source == 'Kannur' %}selected{% endif %}>Kannur</option>
+                    <option value="Kasaragod" {% if request.GET.source == 'Kasaragod' %}selected{% endif %}>Kasaragod</option>
+                    <option value="Kollam" {% if request.GET.source == 'Kollam' %}selected{% endif %}>Kollam</option>
+                    <option value="Kottayam" {% if request.GET.source == 'Kottayam' %}selected{% endif %}>Kottayam</option>
+                    <option value="Kozhikode" {% if request.GET.source == 'Kozhikode' %}selected{% endif %}>Kozhikode</option>
+                    <option value="Malappuram" {% if request.GET.source == 'Malappuram' %}selected{% endif %}>Malappuram</option>
+                    <option value="Palakkad" {% if request.GET.source == 'Palakkad' %}selected{% endif %}>Palakkad</option>
+                    <option value="Pathanamthitta" {% if request.GET.source == 'Pathanamthitta' %}selected{% endif %}>Pathanamthitta</option>
+                    <option value="Thiruvananthapuram" {% if request.GET.source == 'Thiruvananthapuram' %}selected{% endif %}>Thiruvananthapuram</option>
+                    <option value="Thrissur" {% if request.GET.source == 'Thrissur' %}selected{% endif %}>Thrissur</option>
+                    <option value="Wayanad" {% if request.GET.source == 'Wayanad' %}selected{% endif %}>Wayanad</option>
+                    <option value="Munnar" {% if request.GET.source == 'Munnar' %}selected{% endif %}>Munnar</option>
+                    <option value="Varkala" {% if request.GET.source == 'Varkala' %}selected{% endif %}>Varkala</option>
+                    <option value="Guruvayur" {% if request.GET.source == 'Guruvayur' %}selected{% endif %}>Guruvayur</option>
+                </select>
             </div>
             
             <div style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--primary-light); color: var(--primary);">
@@ -21,7 +40,26 @@
 
             <div style="flex: 1; min-width: 200px; position: relative;">
                 <i class="fas fa-map-pin" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
-                <input type="text" name="destination" value="{{ request.GET.destination }}" placeholder="To City" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa;">
+                <select name="destination" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; -webkit-appearance: none; appearance: none; cursor: pointer;">
+                    <option value="" {% if not request.GET.destination %}selected{% endif %}>To City (All)</option>
+                    <option value="Alappuzha" {% if request.GET.destination == 'Alappuzha' %}selected{% endif %}>Alappuzha</option>
+                    <option value="Ernakulam / Kochi" {% if request.GET.destination == 'Ernakulam / Kochi' %}selected{% endif %}>Ernakulam / Kochi</option>
+                    <option value="Idukki" {% if request.GET.destination == 'Idukki' %}selected{% endif %}>Idukki</option>
+                    <option value="Kannur" {% if request.GET.destination == 'Kannur' %}selected{% endif %}>Kannur</option>
+                    <option value="Kasaragod" {% if request.GET.destination == 'Kasaragod' %}selected{% endif %}>Kasaragod</option>
+                    <option value="Kollam" {% if request.GET.destination == 'Kollam' %}selected{% endif %}>Kollam</option>
+                    <option value="Kottayam" {% if request.GET.destination == 'Kottayam' %}selected{% endif %}>Kottayam</option>
+                    <option value="Kozhikode" {% if request.GET.destination == 'Kozhikode' %}selected{% endif %}>Kozhikode</option>
+                    <option value="Malappuram" {% if request.GET.destination == 'Malappuram' %}selected{% endif %}>Malappuram</option>
+                    <option value="Palakkad" {% if request.GET.destination == 'Palakkad' %}selected{% endif %}>Palakkad</option>
+                    <option value="Pathanamthitta" {% if request.GET.destination == 'Pathanamthitta' %}selected{% endif %}>Pathanamthitta</option>
+                    <option value="Thiruvananthapuram" {% if request.GET.destination == 'Thiruvananthapuram' %}selected{% endif %}>Thiruvananthapuram</option>
+                    <option value="Thrissur" {% if request.GET.destination == 'Thrissur' %}selected{% endif %}>Thrissur</option>
+                    <option value="Wayanad" {% if request.GET.destination == 'Wayanad' %}selected{% endif %}>Wayanad</option>
+                    <option value="Munnar" {% if request.GET.destination == 'Munnar' %}selected{% endif %}>Munnar</option>
+                    <option value="Varkala" {% if request.GET.destination == 'Varkala' %}selected{% endif %}>Varkala</option>
+                    <option value="Guruvayur" {% if request.GET.destination == 'Guruvayur' %}selected{% endif %}>Guruvayur</option>
+                </select>
             </div>
             
             <div style="flex: 1; min-width: 200px; position: relative;">

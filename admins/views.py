@@ -8,10 +8,35 @@ from users.models import Booking
 from staff.models import Staff
 from django import forms
 
-# Forms for Admin management
 class BusForm(forms.ModelForm):
-    source = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Starting point', 'style': 'padding-left: 44px;'}))
-    destination = forms.CharField(widget=forms.TextInput(attrs={'class': 'input', 'placeholder': 'Final stop', 'style': 'padding-left: 44px;'}))
+    KERALA_CITIES = [
+        ('Alappuzha', 'Alappuzha'),
+        ('Ernakulam / Kochi', 'Ernakulam / Kochi'),
+        ('Idukki', 'Idukki'),
+        ('Kannur', 'Kannur'),
+        ('Kasaragod', 'Kasaragod'),
+        ('Kollam', 'Kollam'),
+        ('Kottayam', 'Kottayam'),
+        ('Kozhikode', 'Kozhikode'),
+        ('Malappuram', 'Malappuram'),
+        ('Palakkad', 'Palakkad'),
+        ('Pathanamthitta', 'Pathanamthitta'),
+        ('Thiruvananthapuram', 'Thiruvananthapuram'),
+        ('Thrissur', 'Thrissur'),
+        ('Wayanad', 'Wayanad'),
+        ('Munnar', 'Munnar'),
+        ('Varkala', 'Varkala'),
+        ('Guruvayur', 'Guruvayur'),
+    ]
+
+    source = forms.ChoiceField(
+        choices=KERALA_CITIES,
+        widget=forms.Select(attrs={'class': 'input', 'style': 'padding-left: 44px; height: 50px;'})
+    )
+    destination = forms.ChoiceField(
+        choices=KERALA_CITIES,
+        widget=forms.Select(attrs={'class': 'input', 'style': 'padding-left: 44px; height: 50px;'})
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
