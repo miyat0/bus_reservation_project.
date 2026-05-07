@@ -4,7 +4,7 @@ services:
     runtime: python
     buildCommand: "./build.sh"
     releaseCommand: "python manage.py migrate"
-    startCommand: "gunicorn config.wsgi:application"
+    startCommand: "python manage.py migrate && gunicorn config.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.5
