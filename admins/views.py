@@ -227,11 +227,18 @@ def manage_staff(request):
         staff = get_object_or_404(Staff, id=staff_id)
         if bus_id:
             bus = get_object_or_404(Bus, id=bus_id)
-            staff.assigned_bus = bus
+            already_assigned = Staff.objects.filter(assigned_bus=bus).exclude(id=staff.id).exists()
+            if already_assigned:
+                other_staff = Staff.objects.filter(assigned_bus=bus).exclude(id=staff.id).first()
+                messages.error(request, f'Bus "{bus.bus_name}" is already assigned to staff "{other_staff.user.username}".')
+            else:
+                staff.assigned_bus = bus
+                staff.save()
+                messages.success(request, f'Updated assignment for {staff.user.username}')
         else:
             staff.assigned_bus = None
-        staff.save()
-        messages.success(request, f'Updated assignment for {staff.user.username}')
+            staff.save()
+            messages.success(request, f'Updated assignment for {staff.user.username}')
         return redirect('manage_staff')
         
     buses = Bus.objects.all()
@@ -257,8 +264,14 @@ def add_staff(request):
             
             staff = Staff.objects.create(user=user, contact_number=contact)
             if bus_id:
-                staff.assigned_bus = Bus.objects.get(id=bus_id)
-                staff.save()
+                bus = Bus.objects.get(id=bus_id)
+                already_assigned = Staff.objects.filter(assigned_bus=bus).exists()
+                if already_assigned:
+                    other_staff = Staff.objects.filter(assigned_bus=bus).first()
+                    messages.warning(request, f'Staff member created, but Bus "{bus.bus_name}" is already assigned to "{other_staff.user.username}" and could not be assigned.')
+                else:
+                    staff.assigned_bus = bus
+                    staff.save()
             
             messages.success(request, f'Staff member {username} created successfully.')
             return redirect('all_users')

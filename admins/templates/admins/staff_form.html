@@ -55,7 +55,15 @@
                 <select name="bus_id" class="input" style="padding-left: 44px;">
                     <option value="">-- No Assignment --</option>
                     {% for bus in buses %}
-                        <option value="{{ bus.id }}">{{ bus.bus_name }} ({{ bus.source }} → {{ bus.destination }})</option>
+                        {% with bus.staff_set.first as assigned_staff %}
+                            {% if assigned_staff %}
+                                <option value="{{ bus.id }}" disabled style="color: #94a3b8; font-style: italic;">
+                                    {{ bus.bus_name }} ({{ bus.source }} → {{ bus.destination }}) - Assigned to {{ assigned_staff.user.username }}
+                                </option>
+                            {% else %}
+                                <option value="{{ bus.id }}">{{ bus.bus_name }} ({{ bus.source }} → {{ bus.destination }})</option>
+                            {% endif %}
+                        {% endwith %}
                     {% endfor %}
                 </select>
             </div>

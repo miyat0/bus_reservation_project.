@@ -56,10 +56,18 @@
                         <form method="post" style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
                             {% csrf_token %}
                             <input type="hidden" name="staff_id" value="{{ staff.id }}">
-                            <select name="bus_id" class="input" style="padding: 8px 12px; font-size: 0.85rem; width: auto; min-width: 160px; height: 40px;">
+                             <select name="bus_id" class="input" style="padding: 8px 12px; font-size: 0.85rem; width: auto; min-width: 160px; height: 40px;">
                                 <option value="">Select Service...</option>
                                 {% for bus in buses %}
-                                    <option value="{{ bus.id }}" {% if staff.assigned_bus_id == bus.id %}selected{% endif %}>{{ bus.bus_name }}</option>
+                                    {% with bus.staff_set.first as assigned_staff %}
+                                        {% if assigned_staff and assigned_staff.id != staff.id %}
+                                            <option value="{{ bus.id }}" disabled style="color: #94a3b8; font-style: italic;">
+                                                {{ bus.bus_name }} (Assigned to {{ assigned_staff.user.username }})
+                                            </option>
+                                        {% else %}
+                                            <option value="{{ bus.id }}" {% if staff.assigned_bus_id == bus.id %}selected{% endif %}>{{ bus.bus_name }}</option>
+                                        {% endif %}
+                                    {% endwith %}
                                 {% endfor %}
                             </select>
                             <button type="submit" class="btn btn-primary btn-sm" style="height: 40px; padding: 0 16px;">

@@ -126,10 +126,18 @@
                         {% csrf_token %}
                         <input type="hidden" name="staff_id" value="{{ s.id }}">
                         <div style="display: flex; gap: 8px;">
-                            <select name="bus_id" class="input" style="padding: 8px 12px; font-size: 0.85rem; height: 40px;">
+                             <select name="bus_id" class="input" style="padding: 8px 12px; font-size: 0.85rem; height: 40px;">
                                 <option value="">(No Assignment)</option>
                                 {% for b in buses %}
-                                    <option value="{{ b.id }}" {% if s.assigned_bus_id == b.id %}selected{% endif %}>{{ b.bus_name }} ({{ b.source }})</option>
+                                    {% with b.staff_set.first as assigned_staff %}
+                                        {% if assigned_staff and assigned_staff.id != s.id %}
+                                            <option value="{{ b.id }}" disabled style="color: #94a3b8; font-style: italic;">
+                                                {{ b.bus_name }} (Assigned to {{ assigned_staff.user.username }})
+                                            </option>
+                                        {% else %}
+                                            <option value="{{ b.id }}" {% if s.assigned_bus_id == b.id %}selected{% endif %}>{{ b.bus_name }} ({{ b.source }})</option>
+                                        {% endif %}
+                                    {% endwith %}
                                 {% endfor %}
                             </select>
                             <button type="submit" class="btn btn-primary btn-sm" style="height: 40px; padding: 0 16px;">Set</button>
