@@ -12,8 +12,9 @@ from admins.models import Bus
 cities = ['Kochi', 'Trivandrum', 'Kozhikode', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Mysore', 'Mangalore', 'Hyderabad']
 
 def populate():
-    # Clear existing buses if desired, or just add new ones
-    # Bus.objects.all().delete()
+    if Bus.objects.exists():
+        print("Buses already exist in the database. Skipping seeding.")
+        return
     
     bus_names = [
         "Kerala Express", "Tamil Nadu Voyager", "Karnataka Shuttle", "Telangana Link", 
