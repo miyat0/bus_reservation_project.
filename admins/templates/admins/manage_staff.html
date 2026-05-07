@@ -59,7 +59,7 @@
                             <select name="bus_id" class="input" style="padding: 8px 12px; font-size: 0.85rem; width: auto; min-width: 160px; height: 40px;">
                                 <option value="">Select Service...</option>
                                 {% for bus in buses %}
-                                    <option value="{{ bus.id }}" {% if staff.assigned_bus.id == bus.id %}selected{% endif %}>{{ bus.bus_name }}</option>
+                                    <option value="{{ bus.id }}" {% if staff.assigned_bus_id == bus.id %}selected{% endif %}>{{ bus.bus_name }}</option>
                                 {% endfor %}
                             </select>
                             <button type="submit" class="btn btn-primary btn-sm" style="height: 40px; padding: 0 16px;">

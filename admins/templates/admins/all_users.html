@@ -129,7 +129,7 @@
                             <select name="bus_id" class="input" style="padding: 8px 12px; font-size: 0.85rem; height: 40px;">
                                 <option value="">(No Assignment)</option>
                                 {% for b in buses %}
-                                    <option value="{{ b.id }}" {% if s.assigned_bus.id == b.id %}selected{% endif %}>{{ b.bus_name }} ({{ b.source }})</option>
+                                    <option value="{{ b.id }}" {% if s.assigned_bus_id == b.id %}selected{% endif %}>{{ b.bus_name }} ({{ b.source }})</option>
                                 {% endfor %}
                             </select>
                             <button type="submit" class="btn btn-primary btn-sm" style="height: 40px; padding: 0 16px;">Set</button>
