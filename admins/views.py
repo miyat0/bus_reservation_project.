@@ -199,7 +199,7 @@ def add_staff(request):
         contact = request.POST.get('contact_number')
         bus_id = request.POST.get('bus_id')
         
-        if len(contact) > 10:
+        if contact and len(contact) > 10:
             messages.error(request, 'Contact number cannot exceed 10 characters.')
         elif User.objects.filter(username=username).exists():
             messages.error(request, f'Username {username} already exists.')

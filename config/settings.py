@@ -19,6 +19,8 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver', '*']
 
+CSRF_TRUSTED_ORIGINS = ['http://quickgos.online', 'https://quickgos.online', 'http://16.170.244.124']
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
