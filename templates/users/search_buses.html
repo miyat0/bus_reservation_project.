@@ -12,7 +12,7 @@
         <form method="get" action="{% url 'search_buses' %}" style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
             <div style="flex: 1; min-width: 200px; position: relative;">
                 <i class="fas fa-location-dot" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
-                <select name="source" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; -webkit-appearance: none; appearance: none; cursor: pointer;">
+                <select name="source" class="input" style="padding-left: 48px; padding-right: 40px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; -webkit-appearance: none; appearance: none; cursor: pointer;">
                     <option value="" {% if not request.GET.source %}selected{% endif %}>From City (All)</option>
                     <optgroup label="Kerala">
                         <option value="Alappuzha" {% if request.GET.source == 'Alappuzha' %}selected{% endif %}>Alappuzha</option>
@@ -46,6 +46,7 @@
                         <option value="Gokarna" {% if request.GET.source == 'Gokarna' %}selected{% endif %}>Gokarna</option>
                     </optgroup>
                 </select>
+                <i class="fas fa-chevron-down" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); pointer-events: none; z-index: 1;"></i>
             </div>
             
             <div style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--primary-light); color: var(--primary);">
@@ -54,7 +55,7 @@
 
             <div style="flex: 1; min-width: 200px; position: relative;">
                 <i class="fas fa-map-pin" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
-                <select name="destination" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; -webkit-appearance: none; appearance: none; cursor: pointer;">
+                <select name="destination" class="input" style="padding-left: 48px; padding-right: 40px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; -webkit-appearance: none; appearance: none; cursor: pointer;">
                     <option value="" {% if not request.GET.destination %}selected{% endif %}>To City (All)</option>
                     <optgroup label="Kerala">
                         <option value="Alappuzha" {% if request.GET.destination == 'Alappuzha' %}selected{% endif %}>Alappuzha</option>
@@ -88,6 +89,7 @@
                         <option value="Gokarna" {% if request.GET.destination == 'Gokarna' %}selected{% endif %}>Gokarna</option>
                     </optgroup>
                 </select>
+                <i class="fas fa-chevron-down" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); pointer-events: none; z-index: 1;"></i>
             </div>
             
             <div style="flex: 1; min-width: 200px; position: relative;">
