@@ -355,7 +355,7 @@
             <div style="display: flex; align-items: center; gap: 40px;">
                 <div class="nav-links">
                     <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
-                    <a href="#support-section" class="nav-link">Support</a>
+                    <a href="{% if request.resolver_match.url_name == 'home' %}#support-section{% else %}{% url 'home' %}#support-section{% endif %}" class="nav-link">Support</a>
                     {% if user.is_authenticated %}
                         <a href="{% url 'my_bookings' %}" class="nav-link">My Bookings</a>
                     {% endif %}
