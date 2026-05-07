@@ -14,23 +14,37 @@
                 <i class="fas fa-location-dot" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
                 <select name="source" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; -webkit-appearance: none; appearance: none; cursor: pointer;">
                     <option value="" {% if not request.GET.source %}selected{% endif %}>From City (All)</option>
-                    <option value="Alappuzha" {% if request.GET.source == 'Alappuzha' %}selected{% endif %}>Alappuzha</option>
-                    <option value="Ernakulam / Kochi" {% if request.GET.source == 'Ernakulam / Kochi' %}selected{% endif %}>Ernakulam / Kochi</option>
-                    <option value="Idukki" {% if request.GET.source == 'Idukki' %}selected{% endif %}>Idukki</option>
-                    <option value="Kannur" {% if request.GET.source == 'Kannur' %}selected{% endif %}>Kannur</option>
-                    <option value="Kasaragod" {% if request.GET.source == 'Kasaragod' %}selected{% endif %}>Kasaragod</option>
-                    <option value="Kollam" {% if request.GET.source == 'Kollam' %}selected{% endif %}>Kollam</option>
-                    <option value="Kottayam" {% if request.GET.source == 'Kottayam' %}selected{% endif %}>Kottayam</option>
-                    <option value="Kozhikode" {% if request.GET.source == 'Kozhikode' %}selected{% endif %}>Kozhikode</option>
-                    <option value="Malappuram" {% if request.GET.source == 'Malappuram' %}selected{% endif %}>Malappuram</option>
-                    <option value="Palakkad" {% if request.GET.source == 'Palakkad' %}selected{% endif %}>Palakkad</option>
-                    <option value="Pathanamthitta" {% if request.GET.source == 'Pathanamthitta' %}selected{% endif %}>Pathanamthitta</option>
-                    <option value="Thiruvananthapuram" {% if request.GET.source == 'Thiruvananthapuram' %}selected{% endif %}>Thiruvananthapuram</option>
-                    <option value="Thrissur" {% if request.GET.source == 'Thrissur' %}selected{% endif %}>Thrissur</option>
-                    <option value="Wayanad" {% if request.GET.source == 'Wayanad' %}selected{% endif %}>Wayanad</option>
-                    <option value="Munnar" {% if request.GET.source == 'Munnar' %}selected{% endif %}>Munnar</option>
-                    <option value="Varkala" {% if request.GET.source == 'Varkala' %}selected{% endif %}>Varkala</option>
-                    <option value="Guruvayur" {% if request.GET.source == 'Guruvayur' %}selected{% endif %}>Guruvayur</option>
+                    <optgroup label="Kerala">
+                        <option value="Alappuzha" {% if request.GET.source == 'Alappuzha' %}selected{% endif %}>Alappuzha</option>
+                        <option value="Ernakulam / Kochi" {% if request.GET.source == 'Ernakulam / Kochi' %}selected{% endif %}>Ernakulam / Kochi</option>
+                        <option value="Kannur" {% if request.GET.source == 'Kannur' %}selected{% endif %}>Kannur</option>
+                        <option value="Kottayam" {% if request.GET.source == 'Kottayam' %}selected{% endif %}>Kottayam</option>
+                        <option value="Kozhikode" {% if request.GET.source == 'Kozhikode' %}selected{% endif %}>Kozhikode</option>
+                        <option value="Munnar" {% if request.GET.source == 'Munnar' %}selected{% endif %}>Munnar</option>
+                        <option value="Palakkad" {% if request.GET.source == 'Palakkad' %}selected{% endif %}>Palakkad</option>
+                        <option value="Thiruvananthapuram" {% if request.GET.source == 'Thiruvananthapuram' %}selected{% endif %}>Thiruvananthapuram</option>
+                        <option value="Thrissur" {% if request.GET.source == 'Thrissur' %}selected{% endif %}>Thrissur</option>
+                        <option value="Wayanad" {% if request.GET.source == 'Wayanad' %}selected{% endif %}>Wayanad</option>
+                    </optgroup>
+                    <optgroup label="Tamil Nadu">
+                        <option value="Chennai" {% if request.GET.source == 'Chennai' %}selected{% endif %}>Chennai</option>
+                        <option value="Coimbatore" {% if request.GET.source == 'Coimbatore' %}selected{% endif %}>Coimbatore</option>
+                        <option value="Madurai" {% if request.GET.source == 'Madurai' %}selected{% endif %}>Madurai</option>
+                        <option value="Salem" {% if request.GET.source == 'Salem' %}selected{% endif %}>Salem</option>
+                        <option value="Tiruchirappalli" {% if request.GET.source == 'Tiruchirappalli' %}selected{% endif %}>Tiruchirappalli</option>
+                        <option value="Ooty" {% if request.GET.source == 'Ooty' %}selected{% endif %}>Ooty</option>
+                        <option value="Kanyakumari" {% if request.GET.source == 'Kanyakumari' %}selected{% endif %}>Kanyakumari</option>
+                        <option value="Vellore" {% if request.GET.source == 'Vellore' %}selected{% endif %}>Vellore</option>
+                    </optgroup>
+                    <optgroup label="Karnataka">
+                        <option value="Bengaluru" {% if request.GET.source == 'Bengaluru' %}selected{% endif %}>Bengaluru</option>
+                        <option value="Mysuru" {% if request.GET.source == 'Mysuru' %}selected{% endif %}>Mysuru</option>
+                        <option value="Mangaluru" {% if request.GET.source == 'Mangaluru' %}selected{% endif %}>Mangaluru</option>
+                        <option value="Hubballi" {% if request.GET.source == 'Hubballi' %}selected{% endif %}>Hubballi</option>
+                        <option value="Belagavi" {% if request.GET.source == 'Belagavi' %}selected{% endif %}>Belagavi</option>
+                        <option value="Udupi" {% if request.GET.source == 'Udupi' %}selected{% endif %}>Udupi</option>
+                        <option value="Gokarna" {% if request.GET.source == 'Gokarna' %}selected{% endif %}>Gokarna</option>
+                    </optgroup>
                 </select>
             </div>
             
@@ -42,23 +56,37 @@
                 <i class="fas fa-map-pin" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary); z-index: 1;"></i>
                 <select name="destination" class="input" style="padding-left: 48px; border-radius: 20px; height: 56px; border-color: #f1f5f9; background: #fafafa; -webkit-appearance: none; appearance: none; cursor: pointer;">
                     <option value="" {% if not request.GET.destination %}selected{% endif %}>To City (All)</option>
-                    <option value="Alappuzha" {% if request.GET.destination == 'Alappuzha' %}selected{% endif %}>Alappuzha</option>
-                    <option value="Ernakulam / Kochi" {% if request.GET.destination == 'Ernakulam / Kochi' %}selected{% endif %}>Ernakulam / Kochi</option>
-                    <option value="Idukki" {% if request.GET.destination == 'Idukki' %}selected{% endif %}>Idukki</option>
-                    <option value="Kannur" {% if request.GET.destination == 'Kannur' %}selected{% endif %}>Kannur</option>
-                    <option value="Kasaragod" {% if request.GET.destination == 'Kasaragod' %}selected{% endif %}>Kasaragod</option>
-                    <option value="Kollam" {% if request.GET.destination == 'Kollam' %}selected{% endif %}>Kollam</option>
-                    <option value="Kottayam" {% if request.GET.destination == 'Kottayam' %}selected{% endif %}>Kottayam</option>
-                    <option value="Kozhikode" {% if request.GET.destination == 'Kozhikode' %}selected{% endif %}>Kozhikode</option>
-                    <option value="Malappuram" {% if request.GET.destination == 'Malappuram' %}selected{% endif %}>Malappuram</option>
-                    <option value="Palakkad" {% if request.GET.destination == 'Palakkad' %}selected{% endif %}>Palakkad</option>
-                    <option value="Pathanamthitta" {% if request.GET.destination == 'Pathanamthitta' %}selected{% endif %}>Pathanamthitta</option>
-                    <option value="Thiruvananthapuram" {% if request.GET.destination == 'Thiruvananthapuram' %}selected{% endif %}>Thiruvananthapuram</option>
-                    <option value="Thrissur" {% if request.GET.destination == 'Thrissur' %}selected{% endif %}>Thrissur</option>
-                    <option value="Wayanad" {% if request.GET.destination == 'Wayanad' %}selected{% endif %}>Wayanad</option>
-                    <option value="Munnar" {% if request.GET.destination == 'Munnar' %}selected{% endif %}>Munnar</option>
-                    <option value="Varkala" {% if request.GET.destination == 'Varkala' %}selected{% endif %}>Varkala</option>
-                    <option value="Guruvayur" {% if request.GET.destination == 'Guruvayur' %}selected{% endif %}>Guruvayur</option>
+                    <optgroup label="Kerala">
+                        <option value="Alappuzha" {% if request.GET.destination == 'Alappuzha' %}selected{% endif %}>Alappuzha</option>
+                        <option value="Ernakulam / Kochi" {% if request.GET.destination == 'Ernakulam / Kochi' %}selected{% endif %}>Ernakulam / Kochi</option>
+                        <option value="Kannur" {% if request.GET.destination == 'Kannur' %}selected{% endif %}>Kannur</option>
+                        <option value="Kottayam" {% if request.GET.destination == 'Kottayam' %}selected{% endif %}>Kottayam</option>
+                        <option value="Kozhikode" {% if request.GET.destination == 'Kozhikode' %}selected{% endif %}>Kozhikode</option>
+                        <option value="Munnar" {% if request.GET.destination == 'Munnar' %}selected{% endif %}>Munnar</option>
+                        <option value="Palakkad" {% if request.GET.destination == 'Palakkad' %}selected{% endif %}>Palakkad</option>
+                        <option value="Thiruvananthapuram" {% if request.GET.destination == 'Thiruvananthapuram' %}selected{% endif %}>Thiruvananthapuram</option>
+                        <option value="Thrissur" {% if request.GET.destination == 'Thrissur' %}selected{% endif %}>Thrissur</option>
+                        <option value="Wayanad" {% if request.GET.destination == 'Wayanad' %}selected{% endif %}>Wayanad</option>
+                    </optgroup>
+                    <optgroup label="Tamil Nadu">
+                        <option value="Chennai" {% if request.GET.destination == 'Chennai' %}selected{% endif %}>Chennai</option>
+                        <option value="Coimbatore" {% if request.GET.destination == 'Coimbatore' %}selected{% endif %}>Coimbatore</option>
+                        <option value="Madurai" {% if request.GET.destination == 'Madurai' %}selected{% endif %}>Madurai</option>
+                        <option value="Salem" {% if request.GET.destination == 'Salem' %}selected{% endif %}>Salem</option>
+                        <option value="Tiruchirappalli" {% if request.GET.destination == 'Tiruchirappalli' %}selected{% endif %}>Tiruchirappalli</option>
+                        <option value="Ooty" {% if request.GET.destination == 'Ooty' %}selected{% endif %}>Ooty</option>
+                        <option value="Kanyakumari" {% if request.GET.destination == 'Kanyakumari' %}selected{% endif %}>Kanyakumari</option>
+                        <option value="Vellore" {% if request.GET.destination == 'Vellore' %}selected{% endif %}>Vellore</option>
+                    </optgroup>
+                    <optgroup label="Karnataka">
+                        <option value="Bengaluru" {% if request.GET.destination == 'Bengaluru' %}selected{% endif %}>Bengaluru</option>
+                        <option value="Mysuru" {% if request.GET.destination == 'Mysuru' %}selected{% endif %}>Mysuru</option>
+                        <option value="Mangaluru" {% if request.GET.destination == 'Mangaluru' %}selected{% endif %}>Mangaluru</option>
+                        <option value="Hubballi" {% if request.GET.destination == 'Hubballi' %}selected{% endif %}>Hubballi</option>
+                        <option value="Belagavi" {% if request.GET.destination == 'Belagavi' %}selected{% endif %}>Belagavi</option>
+                        <option value="Udupi" {% if request.GET.destination == 'Udupi' %}selected{% endif %}>Udupi</option>
+                        <option value="Gokarna" {% if request.GET.destination == 'Gokarna' %}selected{% endif %}>Gokarna</option>
+                    </optgroup>
                 </select>
             </div>
             

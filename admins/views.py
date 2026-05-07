@@ -9,32 +9,45 @@ from staff.models import Staff
 from django import forms
 
 class BusForm(forms.ModelForm):
-    KERALA_CITIES = [
-        ('Alappuzha', 'Alappuzha'),
-        ('Ernakulam / Kochi', 'Ernakulam / Kochi'),
-        ('Idukki', 'Idukki'),
-        ('Kannur', 'Kannur'),
-        ('Kasaragod', 'Kasaragod'),
-        ('Kollam', 'Kollam'),
-        ('Kottayam', 'Kottayam'),
-        ('Kozhikode', 'Kozhikode'),
-        ('Malappuram', 'Malappuram'),
-        ('Palakkad', 'Palakkad'),
-        ('Pathanamthitta', 'Pathanamthitta'),
-        ('Thiruvananthapuram', 'Thiruvananthapuram'),
-        ('Thrissur', 'Thrissur'),
-        ('Wayanad', 'Wayanad'),
-        ('Munnar', 'Munnar'),
-        ('Varkala', 'Varkala'),
-        ('Guruvayur', 'Guruvayur'),
+    REGIONAL_CITIES = [
+        # --- Kerala ---
+        ('Alappuzha', 'Alappuzha (Kerala)'),
+        ('Ernakulam / Kochi', 'Ernakulam / Kochi (Kerala)'),
+        ('Kannur', 'Kannur (Kerala)'),
+        ('Kottayam', 'Kottayam (Kerala)'),
+        ('Kozhikode', 'Kozhikode (Kerala)'),
+        ('Munnar', 'Munnar (Kerala)'),
+        ('Palakkad', 'Palakkad (Kerala)'),
+        ('Thiruvananthapuram', 'Thiruvananthapuram (Kerala)'),
+        ('Thrissur', 'Thrissur (Kerala)'),
+        ('Wayanad', 'Wayanad (Kerala)'),
+        
+        # --- Tamil Nadu ---
+        ('Chennai', 'Chennai (Tamil Nadu)'),
+        ('Coimbatore', 'Coimbatore (Tamil Nadu)'),
+        ('Madurai', 'Madurai (Tamil Nadu)'),
+        ('Salem', 'Salem (Tamil Nadu)'),
+        ('Tiruchirappalli', 'Tiruchirappalli (Tamil Nadu)'),
+        ('Ooty', 'Ooty (Tamil Nadu)'),
+        ('Kanyakumari', 'Kanyakumari (Tamil Nadu)'),
+        ('Vellore', 'Vellore (Tamil Nadu)'),
+        
+        # --- Karnataka ---
+        ('Bengaluru', 'Bengaluru (Karnataka)'),
+        ('Mysuru', 'Mysuru (Karnataka)'),
+        ('Mangaluru', 'Mangaluru (Karnataka)'),
+        ('Hubballi', 'Hubballi (Karnataka)'),
+        ('Belagavi', 'Belagavi (Karnataka)'),
+        ('Udupi', 'Udupi (Karnataka)'),
+        ('Gokarna', 'Gokarna (Karnataka)'),
     ]
 
     source = forms.ChoiceField(
-        choices=KERALA_CITIES,
+        choices=REGIONAL_CITIES,
         widget=forms.Select(attrs={'class': 'input', 'style': 'padding-left: 44px; height: 50px;'})
     )
     destination = forms.ChoiceField(
-        choices=KERALA_CITIES,
+        choices=REGIONAL_CITIES,
         widget=forms.Select(attrs={'class': 'input', 'style': 'padding-left: 44px; height: 50px;'})
     )
 

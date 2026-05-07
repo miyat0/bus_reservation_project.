@@ -11,7 +11,11 @@ from admins.models import Bus
 from django.contrib.auth.models import User
 from staff.models import Staff
 
-cities = ['Kochi', 'Trivandrum', 'Kozhikode', 'Chennai', 'Coimbatore', 'Madurai', 'Bangalore', 'Mysore', 'Mangalore', 'Hyderabad']
+cities = [
+    'Alappuzha', 'Ernakulam / Kochi', 'Kannur', 'Kottayam', 'Kozhikode', 'Munnar', 'Palakkad', 'Thiruvananthapuram', 'Thrissur', 'Wayanad',
+    'Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Tiruchirappalli', 'Ooty', 'Kanyakumari', 'Vellore',
+    'Bengaluru', 'Mysuru', 'Mangaluru', 'Hubballi', 'Belagavi', 'Udupi', 'Gokarna'
+]
 
 def create_test_users():
     # 1. Create Admin (admin/admin)
