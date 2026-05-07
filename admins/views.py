@@ -132,7 +132,12 @@ def add_bus(request):
 
 def edit_bus(request, bus_id):
     if not request.user.is_staff: return HttpResponseForbidden()
-    bus = get_object_or_404(Bus, id=bus_id)
+    try:
+        bus = Bus.objects.get(id=bus_id)
+    except Bus.DoesNotExist:
+        messages.warning(request, 'This service has already been removed or does not exist.')
+        return redirect('bus_list')
+    
     if request.method == 'POST':
         form = BusForm(request.POST, instance=bus)
         if form.is_valid():
@@ -145,7 +150,12 @@ def edit_bus(request, bus_id):
 
 def delete_bus(request, bus_id):
     if not request.user.is_staff: return HttpResponseForbidden()
-    bus = get_object_or_404(Bus, id=bus_id)
+    try:
+        bus = Bus.objects.get(id=bus_id)
+    except Bus.DoesNotExist:
+        messages.warning(request, 'This service has already been removed or does not exist.')
+        return redirect('bus_list')
+    
     if request.method == 'POST':
         bus_name = bus.bus_name
         bus.delete()
@@ -156,7 +166,6 @@ def delete_bus(request, bus_id):
 def all_bookings(request):
     if not request.user.is_staff: return HttpResponseForbidden()
     bookings_list = Booking.objects.all().order_by('-booking_date')
-    
     paginator = Paginator(bookings_list, 10)
     page_number = request.GET.get('page')
     bookings = paginator.get_page(page_number)

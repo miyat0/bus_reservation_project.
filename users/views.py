@@ -125,7 +125,12 @@ def book_bus(request, bus_id):
 
 @login_required
 def cancel_booking(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    try:
+        booking = Booking.objects.get(id=booking_id, user=request.user)
+    except Booking.DoesNotExist:
+        messages.warning(request, 'This booking has already been cancelled or does not exist.')
+        return redirect('user_dashboard')
+        
     if request.method == 'POST':
         if booking.status in ['Confirmed', 'In-progress']:
             booking.status = 'Cancelled'
