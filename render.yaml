@@ -3,7 +3,7 @@ services:
     name: quickgo-bus-reservation
     runtime: python
     buildCommand: "./build.sh"
-    releaseCommand: "python manage.py migrate && python populate_buses.py"
+    
     startCommand: "python manage.py migrate && python populate_buses.py && gunicorn config.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
